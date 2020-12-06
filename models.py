@@ -1,6 +1,7 @@
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from forms import UserForm, LoginForm
+from secret import key
 import requests
 
 
@@ -9,7 +10,7 @@ bcrypt = Bcrypt()
 db = SQLAlchemy()
 
 url = "https://api.spoonacular.com/"
-key = "?apiKey=4f8ec226a3c04f66adfc338edbeb4940"
+
 connect_user = "users/connect"
 
 class User(db.Model):
@@ -25,25 +26,25 @@ class User(db.Model):
     password = db.Column(db.Text, nullable=False)
     name = db.Column(db.String(30), nullable=False)
     email = db.Column(db.String(50), nullable=False, unique=True)
+    hashapi = db.Column(db.Text, nullable=False)
 
     @classmethod
     def register(cls, username, password, name, email):
         """Register a user, hashing their password."""
         form = UserForm()
         data = {
-        "username": form.username.data,
-        "password": form.password.data,
         "name": form.name.data,
         "email": form.email.data}
 
         res = requests.post(f'{url}{connect_user}{key}', json=data)
         
-        hashed = res.json()
-        ##hashed = bcrypt.generate_password_hash(password).decode('UTF-8')
+        reshash = res.json()
+        hashed = bcrypt.generate_password_hash(password).decode('UTF-8')
 
         user = User(
-            username=hashed["username"],
-            password=hashed["hash"],
+            username=username,
+            hashapi=reshash["hash"],
+            password=hashed,
             name=name,
             email=email
         )
