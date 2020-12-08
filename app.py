@@ -35,7 +35,7 @@ find = "recipes/complexSearch"
 randomFind = "recipes/random"
 connect_user = "users/connect"
 
-key = "?apiKey=4f8ec226a3c04f66adfc338edbeb4940"
+
 
 
 @app.before_request

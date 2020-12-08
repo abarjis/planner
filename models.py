@@ -10,7 +10,7 @@ bcrypt = Bcrypt()
 db = SQLAlchemy()
 
 url = "https://api.spoonacular.com/"
-key = "?apiKey=4f8ec226a3c04f66adfc338edbeb4940"
+
 
 connect_user = "users/connect"
 
