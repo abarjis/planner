@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %} Weekly Planner {% endblock %}
+{% block body %}
+
+<div class="row">
+
+    <aside class="col-md-4 col-lg-3 col-sm-12" id="home-aside">
+        <div class="card user-card">
+          <div>
+            <a href="/users/{{g.user.id}}" class="card-link"> 
+          Profile
+            </a>
+        </div>
+    </div>
+  </aside>
+
+
+ 
+    <form action="users/{{g.user.id}}/recipes" method="GET">
+        <div class="input-group mb-3" style="max-width: 50%;">
+          <label><input type="search" class="form-control" placeholder="Apple" aria-label="Search" name="q"></label>  
+          
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+            </div>          
+        </div>
+    </form>
+
+
+</div>
+
+
+{% endblock %}

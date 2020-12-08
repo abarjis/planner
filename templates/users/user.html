@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Profile
+{% endblock %}
+
+{% block body %}
+<div class="ml-auto">
+    {% if g.user.id == user.id %}
+    <a href="/users/profile" class="btn btn-outline-secondary">Edit Profile</a>
+    {% endif %}
+<div>
+    <li>Name:{{ user.name }}</li>
+    <li>Email:{{user.email}}</li>
+    <li>Username:{{user.username}}</li>
+</div>
+
+{% endblock %}
