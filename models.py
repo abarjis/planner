@@ -10,6 +10,7 @@ bcrypt = Bcrypt()
 db = SQLAlchemy()
 
 url = "https://api.spoonacular.com/"
+key = "?apiKey=4f8ec226a3c04f66adfc338edbeb4940"
 
 connect_user = "users/connect"
 
@@ -19,36 +20,32 @@ class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(
-        db.String(20),
-        nullable=False,
-        unique=True)
+    username = db.Column(db.String(20), nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)
     name = db.Column(db.String(30), nullable=False)
     email = db.Column(db.String(50), nullable=False, unique=True)
-    hashapi = db.Column(db.Text, nullable=False)
-
+    apihash = db.Column(db.Text, nullable=False)
+    apiuser = db.Column( db.String, nullable=False, unique=True)
+    
+ 
+  
     @classmethod
     def register(cls, username, password, name, email):
         """Register a user, hashing their password."""
-        form = UserForm()
-        data = {
-
-        "name": form.name.data,
-        "email": form.email.data}
-
-        res = requests.post(f'{url}{connect_user}{key}', json=data)
+        
+        res = requests.post(f'{url}{connect_user}{key}', json={})
 
         
-        reshash = res.json()
+        reshashed = res.json()
         hashed = bcrypt.generate_password_hash(password).decode('UTF-8')
 
         user = User(
             username=username,
-            hashapi=reshash["hash"],
             password=hashed,
             name=name,
-            email=email
+            email=email,
+            apiuser=reshashed["username"],
+            apihash=reshashed["hash"]
         )
 
         db.session.add(user)
@@ -63,10 +60,15 @@ class User(db.Model):
 
         user = cls.query.filter_by(username=username).first()
 
-        if user and bcrypt.check_password_hash(user.password, password):
-            return user
-        else:
-            return False
+      ##  if user and bcrypt.check_password_hash(user.password, password):
+        ##    return user
+       ## else:
+        if user:
+            is_auth = bcrypt.check_password_hash(user.password, password)
+            if is_auth:
+                return user
+         
+        return False
 
 
 
