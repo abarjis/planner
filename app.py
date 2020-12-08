@@ -156,6 +156,8 @@ def profile(user_id):
     user = User.query.get_or_404(user_id)
     return render_template('users/user.html', user=user)
 
+
+
 @app.route('/users/profile', methods=["GET", "POST"])
 def edit_profile():
     """Update profile for current user."""
@@ -180,6 +182,24 @@ def edit_profile():
         flash("Wrong password, please try again.", 'danger')
 
     return render_template('users/edit.html', form=form, user_id=user.id)
+
+
+
+@app.route('/users/delete', methods=["POST"])
+def delete_profile():
+    """Delete user."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    do_logout()
+
+    db.session.delete(g.user)
+    db.session.commit()
+
+    flash ('Profile deleted', "danger")
+    return redirect("/register")
 
 
 
@@ -208,7 +228,7 @@ def get_recipe(user_id):
     
   recipe_headers = {
       'host': "api.spoonacular.com",
-      'key' : "?apiKey=4f8ec226a3c04f66adfc338edbeb4940",
+      ,
       'accept': "text/html"
   }
   querystring = {"defaultCss":"true", "showBacklink":"false"}
