@@ -2,6 +2,11 @@
 {% block title %} {{recipe['title']}} {% endblock %}
 {% block body %}
 
+ 
+<form id="my_recipes">
+  <button id="submitBtn" class="btn btn-primary mt-4" data-recipe_id="{{recipe_id}}" data-recipe_title="{{recipe_title}}" data-recipe_url="{{recipe_sourceURL}}" data-user_id="{{user_id}}">Add to my recipes</button>
+</form>
+
 <div style="max-width: 70%; margin: auto; padding-top:3%">
   <div class="media">
       <img src="{{recipe['image']}}" class="mr-3" alt="..." width="20%" height="20%">
@@ -13,4 +18,6 @@
   {{recipe['inregdientsWidget'] | safe }}<br>
   {{recipe['equipmentWidget'] | safe}}
 </div>
+
+
 {% endblock %}

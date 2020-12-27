@@ -20,22 +20,23 @@ class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(20), nullable=False, unique=True)
+    username = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)
-    name = db.Column(db.String(30), nullable=False)
+    name = db.Column(db.String, nullable=False)
     email = db.Column(db.String(50), nullable=False, unique=True)
     apihash = db.Column(db.Text, nullable=False)
     apiuser = db.Column( db.String, nullable=False, unique=True)
-    
+
+    recipes = db.relationship("Recipe", backref="user")
+
+  ##  def __repr__(self):
+    ##    return f"<User #{self.id}: {self.username}, {self.email}>"
  
-  
     @classmethod
     def register(cls, username, password, name, email):
         """Register a user, hashing their password."""
         
         res = requests.post(f'{url}{connect_user}{key}', json={})
-
-        
         reshashed = res.json()
         hashed = bcrypt.generate_password_hash(password).decode('UTF-8')
 
@@ -54,12 +55,9 @@ class User(db.Model):
     @classmethod
     def authenticate(cls, username, password):
         """Validate that user exists & password is correct.
-
         Return user if valid; else return False.
         """
-
         user = cls.query.filter_by(username=username).first()
-
       ##  if user and bcrypt.check_password_hash(user.password, password):
         ##    return user
        ## else:
@@ -70,8 +68,29 @@ class User(db.Model):
          
         return False
 
+class Recipe(db.Model):
+
+    __tablename__ = "recipes"
 
 
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    recipe_title = db.Column(db.Text, nullable=False)
+    recipe_id = db.Column(db.Integer, nullable=False)
+    recipe_url = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+
+    def serialize(self):
+        """Returns a dict representation of todo which we can turn into JSON"""
+        return {
+            'id': self.id,
+            'user_title': self.recipe_title,
+            'user_id': self.user_id,
+            'recipe_id': self.recipe_id,
+            'recipe_url': self.recipe_url
+        }
+
+    def __repr__(self):
+        return f"<Recipe {self.id} recipe_title={self.user_title} user_id={self.user_id} recipe_id={self.recipe_id} recipe_url={self.recipe_url}>"
 
 
 def connect_db(app):

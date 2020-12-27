@@ -8,15 +8,15 @@ class UserForm(FlaskForm):
 
     username = StringField(
         "Username",
-        validators=[InputRequired(), Length(min=1, max=20)],
+        validators=[InputRequired(), Length(min=4)],
     )
     password = PasswordField(
         "Password",
-        validators=[InputRequired(), Length(min=6, max=55)],
+        validators=[InputRequired(), Length(min=6)],
     )
     name = StringField(
         "Name",
-        validators=[InputRequired(), Length(max=30)],
+        validators=[InputRequired(), Length(min=2, max=30)],
     )
     email = StringField(
         "Email",
@@ -31,11 +31,11 @@ class LoginForm(FlaskForm):
 
     username = StringField(
         "Username",
-        validators=[InputRequired(), Length(min=1, max=20)],
+        validators=[InputRequired(), Length(min=4)],
     )
     password = PasswordField(
         "Password",
-        validators=[InputRequired(), Length(min=6, max=55)],
+        validators=[InputRequired(), Length(min=6)],
     )
 
 class UserEditForm(FlaskForm):

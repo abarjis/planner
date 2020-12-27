@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from secret import key
 import requests
 
-from models import connect_db, db, User
+from models import connect_db, db, User, Recipe
 
 CURR_USER_KEY = "curr_user"
 
@@ -210,32 +210,85 @@ def get_recipes(user_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-       # If there is a list of ingridients -> list
     querysearch = request.args['q']
     querys = {"query":querysearch, "number":"6", "addRecipeInformation":"true", "sort":"random"}
     response = requests.get(f'{url}{find}{key}', params=querys)
     res = response.json()
     data = res["results"]
-    return render_template('recipes/recipes.html', recipes=data)
+  ##  recipe_id = data[0]["id"]
+  ##  recipe_title = data[0]["title"]
+  ##  recipe_source = data[0]["sourceUrl"]
+
+  ##  rcp = Recipe(
+    ##            recipe_title = data[0]["title"],
+     ##           recipe_id = data[0]["id"],
+      ##          recipe_url = data[0]["sourceUrl"]
+       ##     )
+
+    ##g.user.recipes.append(rcp)
+  ##  db.session.commit()
+    
+    return render_template("recipes/recipes.html", recipes=data, user_id=user_id, querysearch=querysearch)
+
+   ## return render_template('recipes/recipes.html', recipe_id=recipe_id, recipe_title=recipe_title, recipe_source=recipe_source)
+
+
+"""
+@app.route('/users/<int:user_id>/recipe', methods=["GET"])
+def get_recipe(user_id):
+    recipe_id = request.args['id']
+   ## recipe_info_endpoint = "recipes/{0}/information"
+    ingedientsWidget = "recipes/{0}/ingredientWidget".format(recipe_id)
+    equipmentWidget = "recipes/{0}/equipmentWidget".format(recipe_id)
+    recipe_info = requests.get(f'{url}{recipe_id}{key}').json()
+    response = requests.get(f'{url}{find}{key}', params=querys)
+    
+    querystring = {"defaultCss":"true", "showBacklink":"false"}
+    recipe_info['inregdientsWidget'] = requests.get(f"{url}{ingedientsWidget}{key}", params=querystring).text
+    recipe_info['equipmentWidget'] = requests.get(f"{url}{equipmentWidget}{key}", params=querystring).text
+    
+    return render_template('recipes/recipe.html', recipe=recipe_info)
+"""
+
 
 @app.route('/users/<int:user_id>/recipe', methods=["GET"])
 def get_recipe(user_id):
-  recipe_id = request.args['id']
-  recipe_info_endpoint = "recipes/{0}/information".format(recipe_id)
-  ingedientsWidget = "recipes/{0}/ingredientWidget".format(recipe_id)
-  equipmentWidget = "recipes/{0}/equipmentWidget".format(recipe_id)
-  recipe_info = requests.get(f'{url}{recipe_info_endpoint}{key}').json()
-    
-  recipe_headers = {
-      'host': "api.spoonacular.com",
-      ,
-      'accept': "text/html"
-  }
-  querystring = {"defaultCss":"true", "showBacklink":"false"}
-  recipe_info['inregdientsWidget'] = requests.get(f" {url}{ingedientsWidget}{key}", headers=recipe_headers, params=querystring).text
-  recipe_info['equipmentWidget'] = requests.get(f" {url}{equipmentWidget}{key}", headers=recipe_headers, params=querystring).text
-    
-  return render_template('recipes/recipe.html', recipe=recipe_info)
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    recipe_id = request.args['id']
+    recipe_info_endpoint = "recipes/{0}/information".format(recipe_id)
+    ingedientsWidget = "recipes/{0}/ingredientWidget".format(recipe_id)
+    equipmentWidget = "recipes/{0}/equipmentWidget".format(recipe_id)
+    recipe_info = requests.get(f'{url}{recipe_info_endpoint}{key}').json()
+
+
+    querystring = {"defaultCss":"true", "showBacklink":"false"}
+    recipe_info['inregdientsWidget'] = requests.get(f'{url}{ingedientsWidget}{key}', params=querystring).text
+    recipe_info['equipmentWidget'] = requests.get(f'{url}{equipmentWidget}{key}', params=querystring).text
+     
+
+    return render_template('recipes/recipe.html', recipe=recipe_info, user_id=user_id)
+
+
+
+@app.route('/users/<int:user_id>/myrecipes', methods=["GET"])
+def my_recipes(user_id):
+    """Show a message."""
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    recipes = (Recipe
+                .query
+                .filter(Recipe.user_id == user_id)
+                .all())
+    return render_template('recipes/myrecipes.html', recipe=recipes)
+
+
+
 
 
 

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %} Recipes searcher {% endblock %}
+{% block body %}
+
+{% for r in recipe %}
+
+<li>{{r.recipe_title}}</li>
+<li>{{r.recipe_url}}</li>
+
+
+{% endfor %}
+
+
+
+
+
+
+
+{% endblock %}
