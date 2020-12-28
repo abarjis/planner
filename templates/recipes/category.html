@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="jumbotron">
+  <h1>{{ category.cat_name }}!</h1>
+  {% if category.description %}
+  <p class="lead">{{ category.description }}</p>
+  {% endif %}
+</div>
+
+
+{% endblock %}
