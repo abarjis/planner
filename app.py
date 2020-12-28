@@ -320,11 +320,15 @@ def add_category(user_id):
         return render_template('recipes/new_category.html', form=form)
 
 @app.route("/users/<int:user_id>/categories/<int:category_id>")
-def view_category(category_id):
-    """Show detail on specific food category."""
+def view_category(user_id, category_id):
+    """Show detail on specific category."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
 
     category = Category.query.get_or_404(category_id)
-    return render_template('category.html', category=category)
+    return render_template('recipes/category.html', user_id=user_id, category=category)
 
 
 
