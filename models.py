@@ -27,7 +27,7 @@ class User(db.Model):
     apihash = db.Column(db.Text, nullable=False)
     apiuser = db.Column( db.String, nullable=False, unique=True)
 
-    recipes = db.relationship("Recipe", backref="user")
+    recipes = db.relationship("Recipe", backref="users")
 
   ##  def __repr__(self):
     ##    return f"<User #{self.id}: {self.username}, {self.email}>"
@@ -68,6 +68,19 @@ class User(db.Model):
          
         return False
 
+class Category(db.Model):
+    """Playlist."""
+    
+    __tablename__ = "categories"
+
+    id = db.Column(db.Integer, primary_key=True)
+    cat_name = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text, nullable=False)
+
+    recipes = db.relationship(
+        'Recipe', secondary="category_recipes", backref="categories")
+
+
 class Recipe(db.Model):
 
     __tablename__ = "recipes"
@@ -79,18 +92,18 @@ class Recipe(db.Model):
     recipe_url = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
-    def serialize(self):
-        """Returns a dict representation of todo which we can turn into JSON"""
-        return {
-            'id': self.id,
-            'user_title': self.recipe_title,
-            'user_id': self.user_id,
-            'recipe_id': self.recipe_id,
-            'recipe_url': self.recipe_url
-        }
+    assignments = db.relationship('CatRecipes', backref='recipes')
 
-    def __repr__(self):
-        return f"<Recipe {self.id} recipe_title={self.user_title} user_id={self.user_id} recipe_id={self.recipe_id} recipe_url={self.recipe_url}>"
+
+class CatRecipes(db.Model):
+    """Mapping of a playlist to a song."""
+
+    __tablename__ = "category_recipes"
+    id = db.Column(db.Integer, primary_key=True)
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
+
+
 
 
 def connect_db(app):
@@ -101,3 +114,24 @@ def connect_db(app):
 
     db.app = app
     db.init_app(app)
+
+
+
+
+
+
+"""
+    def serialize(self):
+        Returns a dict representation of todo which we can turn into JSON
+        return {
+            'id': self.id,
+            'user_title': self.recipe_title,
+            'user_id': self.user_id,
+            'recipe_id': self.recipe_id,
+            'recipe_url': self.recipe_url
+        }
+
+    def __repr__(self):
+        return f"<Recipe {self.id} recipe_title={self.user_title} user_id={self.user_id} recipe_id={self.recipe_id} recipe_url={self.recipe_url}>"
+"""
+
