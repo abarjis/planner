@@ -34,6 +34,7 @@
       <li><a href="/register">Sign up</a></li>
       {% else %}
       <li><a href="/users/{{ g.user.id }}">{{ g.user.username }}</a></li>
+      <li><a href="/users/{{ g.user.id }}/categories">Categories</a></li>
       <li><a href="/logout">Log out</a></li>
       {% endif %}
   </ul>
