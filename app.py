@@ -296,10 +296,27 @@ def show_all_categories(user_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    catigores = Catigory.query.all()
-    return render_template("categories.html", categories=catigores)
+    categories = Category.query.all()
+    return render_template("recipes/categories.html", categories=categories)
 
 
+@app.route("/users/<int:user_id>/categories/add", methods=["GET", "POST"])
+def add_category(user_id):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    form = CategoryForm()
+    if form.validate_on_submit():
+        cat_name = form.cat_name.data
+        description = form.description.data
+
+        ctg = Playlist(name=cat_name, description=description)
+        db.session.add(ctg)
+        db.session.commit()
+        return redirect('/users/<int:user_id>/categories')
+    else:
+        return render_template('new_category.html', form=form)
 
 if __name__ == '__main__':
   app.run()
