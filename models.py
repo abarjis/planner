@@ -72,7 +72,7 @@ class User(db.Model):
         return False
 
 class Category(db.Model):
-    """Playlist."""
+    """Categories."""
     
     __tablename__ = "categories"
 
@@ -86,7 +86,7 @@ class Category(db.Model):
 
 
 class Recipe(db.Model):
-
+    """recipes."""
     __tablename__ = "recipes"
 
 
