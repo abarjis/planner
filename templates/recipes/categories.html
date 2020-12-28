@@ -7,7 +7,7 @@
 <ul>
 {% for category in categories %}
   <li>
-     <a href="/users/{{ user_id }}/categories">{{ category.cat_name }}</a>
+     <a href="/users/{{ g.user.id }}/categories/{{ category.id }}">{{ category.cat_name }}</a>
   </li>
 {% endfor %}
 </ul>
