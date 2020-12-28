@@ -302,21 +302,22 @@ def show_all_categories(user_id):
 
 @app.route("/users/<int:user_id>/categories/add", methods=["GET", "POST"])
 def add_category(user_id):
+    """add a new category"""
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
     form = CategoryForm()
     if form.validate_on_submit():
-        cat_name = form.cat_name.data
+        name = form.cat_name.data
         description = form.description.data
 
-        ctg = Playlist(name=cat_name, description=description)
+        ctg = Category(cat_name=name, description=description, user_id=user_id)
         db.session.add(ctg)
         db.session.commit()
-        return redirect('/users/<int:user_id>/categories')
+        return redirect(f"/users/{user_id}/categories")
     else:
-        return render_template('new_category.html', form=form)
+        return render_template('recipes/new_category.html', form=form)
 
 if __name__ == '__main__':
   app.run()
