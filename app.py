@@ -3,12 +3,12 @@ import os
 from flask import Flask, render_template, redirect, session, request, flash, g, abort
 from flask_debugtoolbar import DebugToolbarExtension
 from werkzeug.exceptions import Unauthorized
-from forms import UserForm, LoginForm, UserEditForm
+from forms import UserForm, LoginForm, UserEditForm, CategoryForm, RecipeForm, NewRecipeForCategoryForm
 from sqlalchemy.exc import IntegrityError
 from secret import key
 import requests
 
-from models import connect_db, db, User, Recipe
+from models import connect_db, db, User, Recipe, Category, CatRecipes
 
 CURR_USER_KEY = "curr_user"
 
@@ -82,7 +82,8 @@ def signUp():
 
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
-    
+   ## if g.user:
+
     form = UserForm()
 
     if form.validate_on_submit():
@@ -288,7 +289,12 @@ def my_recipes(user_id):
     return render_template('recipes/myrecipes.html', recipe=recipes)
 
 
+@app.route("/users/<int:user_id>/categories")
+def show_all_categories():
+    """Return a list of categories."""
 
+    catigores = Catigory.query.all()
+    return render_template("categories.html", categories=catigores)
 
 
 
