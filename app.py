@@ -319,5 +319,16 @@ def add_category(user_id):
     else:
         return render_template('recipes/new_category.html', form=form)
 
+@app.route("/users/<int:user_id>/categories/<int:category_id>")
+def view_category(category_id):
+    """Show detail on specific food category."""
+
+    category = Category.query.get_or_404(category_id)
+    return render_template('category.html', category=category)
+
+
+
+
+
 if __name__ == '__main__':
   app.run()
