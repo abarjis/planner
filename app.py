@@ -290,8 +290,11 @@ def my_recipes(user_id):
 
 
 @app.route("/users/<int:user_id>/categories")
-def show_all_categories():
+def show_all_categories(user_id):
     """Return a list of categories."""
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
 
     catigores = Catigory.query.all()
     return render_template("categories.html", categories=catigores)
