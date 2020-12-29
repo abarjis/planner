@@ -1,21 +1,16 @@
 {% extends 'base.html' %}
-{% block title %} Recipes searcher {% endblock %}
+
 {% block body %}
 
-<h2 style="text-align: center"> <a href="/" style="text-decoration: none; color:red"> Recipes for you: </a></h2>
-<div style="margin-left:35%;">
-    {% if g.user %}
-  <ul class="list-unstyled">
-      {% for recipe in recipes %}
-          <li class="media">
-            <a href="/users/{{ user_id }}/recipe?id={{ recipe['id'] }}"><img src="{{recipe['image']}}" class="align-self-center mr-3" alt="..." width="35%" height="35%"></a>
-              <div class="media-body">
-                  <h5 class="mt-0 mb-1"><a href="/users/{{ user_id }}/recipe?id={{ recipe['id'] }}">{{recipe['title']}}</a></h5>
-              </div>
-          </li> <br>
-        
-      {% endfor %}
-  </ul>
-  {% endif %}
-</div >
+<h1>My favirate recipes!</h1>
+
+<ul>
+{% for recipe in recipes %}
+  <li><a href="/users/{{ g.user.id }}/recipes/{{ recipe.id }}"> {{ recipe.title }} </a></li>
+{% endfor %}
+</ul>
+
+<p><a class="btn btn-primary" href="/users/{{ g.user.id }}/recipes/add">Add a recipe</a></p>
+
+
 {% endblock %}

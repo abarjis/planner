@@ -3,16 +3,30 @@
 {% block body %}
 
 <div class="jumbotron">
-  <h1>{{ category.cat_name }}!</h1>
+  <h1>{{ category.title }}!</h1>
   {% if category.description %}
   <p class="lead">{{ category.description }}</p>
   {% endif %}
 </div>
 
+{% for recipe in category.recipes %}
+<p>
+  <b>Recipe:</b>
+  <a href="/users/{{ g.user.id }}/recipes/{{ category.id }}">{{ recipe.title }}</a>
+</p>
+{% endfor %}
+
+<p>
+  <a class="btn btn-primary" href="/users/{{ g.user.id }}/categories/{{ category.id }}/add-recipe">
+  Add a recipe</a>
+</p>
+
+
+
 {% if g.user.id == category.user_id %}
 <form method="POST"
       action="/users/{{ g.user.id }}/categories/{{ category.id }}/delete">
-  <button class="btn btn-outline-danger">Delete</button>
+  <button class="btn btn-outline-danger">Delete Category!</button>
 </form>
 {% endif %}
 
