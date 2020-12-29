@@ -206,8 +206,8 @@ def delete_profile():
 
 
 
-@app.route('/users/<int:user_id>/recipes', methods=["GET"])
-def get_recipes(user_id):
+@app.route('/users/<int:user_id>/search', methods=["GET"])
+def search_recipes(user_id):
     
     if not g.user:
         flash("Access unauthorized.", "danger")
@@ -231,7 +231,7 @@ def get_recipes(user_id):
     ##g.user.recipes.append(rcp)
   ##  db.session.commit()
     
-    return render_template("recipes/recipes.html", recipes=data, user_id=user_id, querysearch=querysearch)
+    return render_template("recipes/search.html", recipes=data, user_id=user_id, querysearch=querysearch)
 
    ## return render_template('recipes/recipes.html', recipe_id=recipe_id, recipe_title=recipe_title, recipe_source=recipe_source)
 
@@ -254,8 +254,8 @@ def get_recipe(user_id):
 """
 
 
-@app.route('/users/<int:user_id>/recipe', methods=["GET"])
-def get_recipe(user_id):
+@app.route('/users/<int:user_id>/info', methods=["GET"])
+def recipe_info(user_id):
 
     if not g.user:
         flash("Access unauthorized.", "danger")
@@ -273,7 +273,7 @@ def get_recipe(user_id):
     recipe_info['equipmentWidget'] = requests.get(f'{url}{equipmentWidget}{key}', params=querystring).text
      
 
-    return render_template('recipes/recipe.html', recipe=recipe_info, user_id=user_id)
+    return render_template('recipes/info.html', recipe=recipe_info, user_id=user_id)
 
 
 
@@ -297,10 +297,10 @@ def add_category(user_id):
 
     form = CategoryForm()
     if form.validate_on_submit():
-        name = form.cat_name.data
+        name = form.title.data
         description = form.description.data
 
-        ctg = Category(cat_name=name, description=description, user_id=user_id)
+        ctg = Category(title=name, description=description, user_id=user_id)
         db.session.add(ctg)
         db.session.commit()
         return redirect(f"/users/{user_id}/categories")
@@ -342,18 +342,18 @@ def delete_category(user_id, category_id):
 
 
 
-@app.route('/users/<int:user_id>/myrecipes', methods=["GET"])
-def my_recipes(user_id):
+@app.route('/users/<int:user_id>/recipes', methods=["GET"])
+def recipes(user_id):
     """Show my favirote recipes."""
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
     recipes = Recipe.query.all()
-    return render_template('recipes/myrecipes.html', recipes=recipes, user_id=user_id)
+    return render_template('recipes/recipes.html', recipes=recipes, user_id=user_id)
 
 
-@app.route("/users/<int:user_id>/myrecipes/<int:recipe_id>")
+@app.route("/users/<int:user_id>/recipes/<int:recipe_id>")
 def view_recipe(user_id, recipe_id):
     """return a specific recipe"""
 
@@ -365,7 +365,7 @@ def view_recipe(user_id, recipe_id):
     return render_template('recipes/view_recipe.html', recipe=recipe, user_id=user_id)
 
 
-@app.route("/users/<int:user_id>/myrecipes/add", methods=["GET", "POST"])
+@app.route("/users/<int:user_id>/recipes/add", methods=["GET", "POST"])
 def add_recipe(user_id):
     """Add a new recipe. """
     
@@ -375,17 +375,58 @@ def add_recipe(user_id):
 
     form = RecipeForm()
     if form.validate_on_submit():
-        title = form.recipe_title.data
+        title = form.title.data
         description = form.description.data
 
-        recipe = Recipe(recipe_title=title, description=description, user_id=user_id)
+        recipe = Recipe(title=title, description=description, user_id=user_id)
         db.session.add(recipe)
         db.session.commit()
-        return redirect(f'/users/{user_id}/myrecipes')
+        return redirect(f'/users/{user_id}/recipes')
     else:
         return render_template('recipes/new_recipe.html', form=form)
 
 
+@app.route('/users/<int:user_id>/recipes/<int:recipe_id>/delete', methods=["POST"])
+def delete_recipe(user_id, recipe_id):
+    """Delete a recipe."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    rcp = Recipe.query.get_or_404(recipe_id)
+    if rcp.user_id != g.user.id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    db.session.delete(rcp)
+    db.session.commit()
+
+    flash("Recipe deleted.", "success")
+    return redirect(f"/users/{g.user.id}/recipes")
+
+
+@app.route("/users/<int:user_id>/categories/<int:category_id>/add-recipe", methods=["GET", "POST"])
+def add_recipe_to_category(user_id, category_id):
+    """Add recipe to a category and redirect to list."""
+    
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    category = Category.query.get_or_404(category_id)
+    form = NewRecipeForCategoryForm()
+
+    if form.validate_on_submit():
+        
+        recipe = Recipe.query.get_or_404(recipe_id)
+        category.recipes.append(recipe)
+
+        db.session.commit()
+
+        return redirect(f"/users/{user_id}/categories/{category_id}")
+
+    return render_template('recipes/add_recipe_to_category.html', category=category, form=form, user_id=user_id)
 
 
 
