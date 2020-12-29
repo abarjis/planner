@@ -275,20 +275,6 @@ def get_recipe(user_id):
 
 
 
-@app.route('/users/<int:user_id>/myrecipes', methods=["GET"])
-def my_recipes(user_id):
-    """Show a message."""
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
-
-    recipes = (Recipe
-                .query
-                .filter(Recipe.user_id == user_id)
-                .all())
-    return render_template('recipes/myrecipes.html', recipe=recipes)
-
-
 @app.route("/users/<int:user_id>/categories")
 def show_all_categories(user_id):
     """Return a list of categories."""
@@ -331,8 +317,48 @@ def view_category(user_id, category_id):
     return render_template('recipes/category.html', user_id=user_id, category=category)
 
 
+@app.route('/users/<int:user_id>/categories/<int:category_id>/delete', methods=["POST"])
+def delete_category(user_id, category_id):
+    """Delete a category."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    ctg = Category.query.get_or_404(category_id)
+    if ctg.user_id != g.user.id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    db.session.delete(ctg)
+    db.session.commit()
+
+    flash("Category deleted.", "danger")
+    return redirect(f"/users/{g.user.id}/categories")
 
 
+
+@app.route('/users/<int:user_id>/myrecipes', methods=["GET"])
+def my_recipes(user_id):
+    """Show my favirote recipes."""
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    recipes = Recipe.query.all()
+    return render_template('recipes/myrecipes.html', recipes=recipes, user_id=user_id)
+
+
+@app.route("/users/<int:user_id>/myrecipes/<int:recipe_id>")
+def view_recipe(user_id, recipe_id):
+    """return a specific recipe"""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    recipe = Recipe.query.get_or_404(recipe_id)
+    return render_template('recipes/view_recipe.html', recipe=recipe, user_id=user_id)
 
 if __name__ == '__main__':
   app.run()
