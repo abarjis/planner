@@ -76,9 +76,9 @@ class Category(db.Model):
     
     __tablename__ = "categories"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     cat_name = db.Column(db.Text, nullable=False)
-    description = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     recipes = db.relationship(
@@ -92,8 +92,8 @@ class Recipe(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     recipe_title = db.Column(db.Text, nullable=False)
-    recipe_id = db.Column(db.Integer, nullable=False)
-    recipe_url = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    recipe_id = db.Column(db.Integer, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     assignments = db.relationship('CatRecipes', backref='recipes')
