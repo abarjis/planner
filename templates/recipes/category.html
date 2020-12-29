@@ -9,5 +9,11 @@
   {% endif %}
 </div>
 
+{% if g.user.id == category.user_id %}
+<form method="POST"
+      action="/users/{{ g.user.id }}/categories/{{ category.id }}/delete">
+  <button class="btn btn-outline-danger">Delete</button>
+</form>
+{% endif %}
 
 {% endblock %}

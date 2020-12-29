@@ -1,19 +1,16 @@
 {% extends 'base.html' %}
-{% block title %} Recipes searcher {% endblock %}
+
 {% block body %}
 
-{% for r in recipe %}
+<h1>My favirate recipes!</h1>
 
-<li>{{r.recipe_title}}</li>
-<li>{{r.recipe_url}}</li>
-
-
+<ul>
+{% for recipe in recipes %}
+  <li><a href="/users/{{ g.user.id }}/myrecipes/{{ recipe.id }}"> {{ recipe.recipe_title }} </a></li>
 {% endfor %}
+</ul>
 
-
-
-
-
+<p><a class="btn btn-primary" href="/myrecipes/add">Add a recipe</a></p>
 
 
 {% endblock %}
