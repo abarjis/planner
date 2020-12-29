@@ -60,11 +60,11 @@ class RecipeForm(FlaskForm):
     """Form for adding recipes."""
     recipe_title = StringField("Recipe Title", validators=[
                        InputRequired(message="recipe title cannot be empty")])
-    recipe_url = StringField("Source", validators=[Optional()])
+    description = StringField("Discription", validators=[Optional()])
 
 
 
 class NewRecipeForCategoryForm(FlaskForm):
     """Form for adding a recipe to a catrgory."""
 
-    song = SelectField('Recipe To Add', coerce=int)
+    recipe = SelectField('Recipe To Add', coerce=int)
