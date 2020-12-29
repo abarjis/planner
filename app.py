@@ -26,6 +26,8 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
+
+
 db.create_all()
  
 
@@ -305,6 +307,7 @@ def add_category(user_id):
     else:
         return render_template('recipes/new_category.html', form=form)
 
+
 @app.route("/users/<int:user_id>/categories/<int:category_id>")
 def view_category(user_id, category_id):
     """Show detail on specific category."""
@@ -315,6 +318,7 @@ def view_category(user_id, category_id):
 
     category = Category.query.get_or_404(category_id)
     return render_template('recipes/category.html', user_id=user_id, category=category)
+
 
 
 @app.route('/users/<int:user_id>/categories/<int:category_id>/delete', methods=["POST"])
@@ -359,6 +363,31 @@ def view_recipe(user_id, recipe_id):
 
     recipe = Recipe.query.get_or_404(recipe_id)
     return render_template('recipes/view_recipe.html', recipe=recipe, user_id=user_id)
+
+
+@app.route("/users/<int:user_id>/myrecipes/add", methods=["GET", "POST"])
+def add_recipe(user_id):
+    """Add a new recipe. """
+    
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    form = RecipeForm()
+    if form.validate_on_submit():
+        title = form.recipe_title.data
+        description = form.description.data
+
+        recipe = Recipe(recipe_title=title, description=description, user_id=user_id)
+        db.session.add(recipe)
+        db.session.commit()
+        return redirect(f'/users/{user_id}/myrecipes')
+    else:
+        return render_template('recipes/new_recipe.html', form=form)
+
+
+
+
 
 if __name__ == '__main__':
   app.run()
