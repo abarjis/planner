@@ -67,4 +67,4 @@ class RecipeForm(FlaskForm):
 class NewRecipeForCategoryForm(FlaskForm):
     """Form for adding a recipe to a catrgory."""
 
-    recipe = RadioField('Recipe To Add', coerce=int)
+    recipe = SelectField('Recipe To Add', coerce=int)

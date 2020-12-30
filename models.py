@@ -29,7 +29,9 @@ class User(db.Model):
 
     categories = db.relationship("Category", backref="users")
     recipes = db.relationship("Recipe", backref="users")
-    category_recipes = db.relationship("CatRecipes", backref="users")
+  ##  category_recipes = db.relationship("CatRecipes", backref="users")
+
+ ##   assignments = db.relationship('CatRecipes', backref='users')
 
 
   ##  def __repr__(self):
@@ -61,9 +63,6 @@ class User(db.Model):
         Return user if valid; else return False.
         """
         user = cls.query.filter_by(username=username).first()
-      ##  if user and bcrypt.check_password_hash(user.password, password):
-        ##    return user
-       ## else:
         if user:
             is_auth = bcrypt.check_password_hash(user.password, password)
             if is_auth:
@@ -84,6 +83,7 @@ class Category(db.Model):
     recipes = db.relationship(
         'Recipe', secondary="category_recipes", backref="categories")
 
+    assignments = db.relationship('CatRecipes', backref='categories')
 
 class Recipe(db.Model):
     """recipes."""
@@ -103,10 +103,10 @@ class CatRecipes(db.Model):
     """Mapping of a playlist to a song."""
 
     __tablename__ = "category_recipes"
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+   ## user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
 
 

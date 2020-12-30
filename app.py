@@ -27,7 +27,7 @@ toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 
-
+##db.drop_all()
 db.create_all()
  
 
@@ -233,25 +233,8 @@ def search_recipes(user_id):
     
     return render_template("recipes/search.html", recipes=data, user_id=user_id, querysearch=querysearch)
 
-   ## return render_template('recipes/recipes.html', recipe_id=recipe_id, recipe_title=recipe_title, recipe_source=recipe_source)
 
 
-"""
-@app.route('/users/<int:user_id>/recipe', methods=["GET"])
-def get_recipe(user_id):
-    recipe_id = request.args['id']
-   ## recipe_info_endpoint = "recipes/{0}/information"
-    ingedientsWidget = "recipes/{0}/ingredientWidget".format(recipe_id)
-    equipmentWidget = "recipes/{0}/equipmentWidget".format(recipe_id)
-    recipe_info = requests.get(f'{url}{recipe_id}{key}').json()
-    response = requests.get(f'{url}{find}{key}', params=querys)
-    
-    querystring = {"defaultCss":"true", "showBacklink":"false"}
-    recipe_info['inregdientsWidget'] = requests.get(f"{url}{ingedientsWidget}{key}", params=querystring).text
-    recipe_info['equipmentWidget'] = requests.get(f"{url}{equipmentWidget}{key}", params=querystring).text
-    
-    return render_template('recipes/recipe.html', recipe=recipe_info)
-"""
 
 
 @app.route('/users/<int:user_id>/info', methods=["GET"])
@@ -417,9 +400,14 @@ def add_recipe_to_category(user_id, category_id):
     category = Category.query.get_or_404(category_id)
     form = NewRecipeForCategoryForm()
 
+    curr_on_category = [r.id for r in category.recipes]
+    form.recipe.choices = (db.session.query(Recipe.id, Recipe.title)
+                    .filter(Recipe.id.notin_(curr_on_category))
+                    .all())
+
     if form.validate_on_submit():
         
-        recipe = Recipe.query.get_or_404(recipe_id)
+        recipe = Recipe.query.get(form.recipe.data)
         category.recipes.append(recipe)
 
         db.session.commit()

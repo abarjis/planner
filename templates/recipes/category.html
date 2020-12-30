@@ -12,7 +12,7 @@
 {% for recipe in category.recipes %}
 <p>
   <b>Recipe:</b>
-  <a href="/users/{{ g.user.id }}/recipes/{{ category.id }}">{{ recipe.title }}</a>
+  <a href="/users/{{ g.user.id }}/recipes/{{ recipe.id }}">{{ recipe.title }}</a>
 </p>
 {% endfor %}
 

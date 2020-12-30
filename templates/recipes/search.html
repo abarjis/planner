@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %} Recipes searcher {% endblock %}
+{% block title %} Recipes search {% endblock %}
 {% block body %}
 
 <h2 style="text-align: center"> <a href="/" style="text-decoration: none; color:red"> Recipes for you: </a></h2>
@@ -8,9 +8,9 @@
   <ul class="list-unstyled">
       {% for recipe in recipes %}
           <li class="media">
-            <a href="/users/{{ user_id }}/recipe?id={{ recipe['id'] }}"><img src="{{recipe['image']}}" class="align-self-center mr-3" alt="..." width="35%" height="35%"></a>
+            <a href="/users/{{ user_id }}/info?id={{ recipe['id'] }}"><img src="{{recipe['image']}}" class="align-self-center mr-3" alt="..." width="35%" height="35%"></a>
               <div class="media-body">
-                  <h5 class="mt-0 mb-1"><a href="/users/{{ user_id }}/recipe?id={{ recipe['id'] }}">{{recipe['title']}}</a></h5>
+                  <h5 class="mt-0 mb-1"><a href="/users/{{ user_id }}/info?id={{ recipe['id'] }}">{{recipe['title']}}</a></h5>
               </div>
           </li> <br>
         
