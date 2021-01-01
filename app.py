@@ -36,7 +36,7 @@ random_joke = "food/jokes/random"
 find = "recipes/complexSearch"
 randomFind = "recipes/random"
 connect_user = "users/connect"
-
+generate = "mealplanner/generate"
 
 
 
@@ -218,21 +218,7 @@ def search_recipes(user_id):
     response = requests.get(f'{url}{find}{key}', params=querys)
     res = response.json()
     data = res["results"]
-  ##  recipe_id = data[0]["id"]
-  ##  recipe_title = data[0]["title"]
-  ##  recipe_source = data[0]["sourceUrl"]
-
-  ##  rcp = Recipe(
-    ##            recipe_title = data[0]["title"],
-     ##           recipe_id = data[0]["id"],
-      ##          recipe_url = data[0]["sourceUrl"]
-       ##     )
-
-    ##g.user.recipes.append(rcp)
-  ##  db.session.commit()
-    
     return render_template("recipes/search.html", recipes=data, user_id=user_id, querysearch=querysearch)
-
 
 
 
@@ -416,6 +402,35 @@ def add_recipe_to_category(user_id, category_id):
 
     return render_template('recipes/add_recipe_to_category.html', category=category, form=form, user_id=user_id)
 
+
+
+@app.route('/users/<int:user_id>/generate-plan', methods=["GET"])
+def generate(user_id):
+    
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    return render_template("recipes/generate_plan.html", user_id=user_id)
+
+
+
+@app.route('/users/<int:user_id>/plan-details', methods=["GET"])
+def plan_details(user_id):
+    
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    targetcal = request.args['targetcal']
+    diet = request.args['diet']
+    exclude = request.args['exclude']
+    querys = {"targetCalories":targetcal, "diet":diet, "exclude":exclude, 'timeFrame':'day'}
+   
+    response = requests.get(f'{url}{generate}{key}', params=querys)
+    res = response.json()
+    
+    return render_template("recipes/plan_details.html", recipes=res, user_id=user_id, targetcal=targetcal, diet=diet, exclude=exclude)
 
 
 if __name__ == '__main__':
