@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %} Daily Meal Planner {% endblock %}
+{% block body %}
+
+<div style="margin-left:35%;">
+  <ul class="list-unstyled">
+      {% for recipe in recipes.meals %}
+          <li><h5>{{recipe[0]['title']}}</h5>
+          </li> 
+        
+
+  </ul>
+  {% endfor %}
+</div >
+{% endblock %}
