@@ -2,32 +2,20 @@
 {% block title %} Weekly Planner {% endblock %}
 {% block body %}
 
-<div class="row">
 
-    <aside class="col-md-4 col-lg-3 col-sm-12" id="home-aside">
-        <div class="card user-card">
-          <div>
-            <a href="/users/{{g.user.id}}" class="card-link"> 
-          Profile
-            </a>
-        </div>
-    </div>
-  </aside>
+<div>
+    <form class="form-inline d-flex justify-content-center md-form form-sm active-purple active-purple-2 mt-2" action="users/{{g.user.id}}/search" method="GET">
+        
+        <input class="form-control form-control-sm ml-3 w-75" type="search" placeholder="Search Over 300.000 Recipes"
+        aria-label="Search" name="q">
 
+            <button class="btn btn-outline-secondary" type="submit" id="button-addon2"> <i class="fa fa-search" aria-hidden="true">
+            </i> </button>
 
- 
-    <form action="users/{{g.user.id}}/search" method="GET">
-        <div class="input-group mb-3" style="max-width: 50%;">
-          <label><input type="search" class="form-control" placeholder="Apple" aria-label="Ingedient" aria-describedby="button-addon2" name="q"></label>  
-          
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
-            </div>          
-        </div>
-    </form>
+      </form>
 
 
 </div>
 
 
-{% endblock %}
+{% endblock %}`
