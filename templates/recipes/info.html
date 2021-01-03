@@ -3,19 +3,24 @@
 {% block body %}
 
  
-<form id="my_recipes">
-  <button id="submitBtn" class="btn btn-primary mt-4" data-recipe_id="{{recipe_id}}" data-recipe_title="{{recipe_title}}" data-recipe_url="{{recipe_sourceURL}}" data-user_id="{{user_id}}">Add to my recipes</button>
-</form>
 
 <div style="max-width: 70%; margin: auto; padding-top:3%">
-  <div class="media">
-      <img src="{{recipe['image']}}" class="mr-3" alt="..." width="20%" height="20%">
-      <div class="media-body">
+
+  <form id="my_recipes">
+    <button id="submitBtn" class="btn btn-success mt-4" data-recipe_id="{{recipe['id']}}" data-recipe_title="{{recipe['title']}}" data-recipe_url="{{recipe_sourceURL}}" data-user_id="{{user_id}}">Add to my recipes</button>
+  </form><br>
+
+
+  <div>
+      <img class="img-fluid" src="{{recipe['image']}}" alt="...">
+      <div class="list">
         <h5 class="mt-0">{{recipe['title']}}</h5>
-        {{recipe['instructions']}}
+        {{recipe['instructions'] | safe}}
       </div>
   </div><br>
-  {{recipe['inregdientsWidget'] | safe }}<br>
+
+  {{recipe['inregdientsWidget'] | safe}}<br>
+  
   {{recipe['equipmentWidget'] | safe}}
 </div>
 
