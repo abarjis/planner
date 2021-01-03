@@ -1,17 +1,29 @@
 {% extends 'base.html' %}
-
+{% block title %} Meal Planner {% endblock %}
 {% block body %}
 
 
-<form action="/users/{{g.user.id}}/plan-details" method="GET">
-    <div class="input-group mb-3" style="max-width: 50%;">
-      <label><input type="text" class="form-control" placeholder="Exclude Ingedient (Ex: olive, fish)" aria-label="exclude" aria-describedby="button-addon2" name="exclude">Exclude:</label>  
-      <label><input type="text" class="form-control" placeholder="Select a Diet (Ex: keto)" aria-label="diet" aria-describedby="button-addon2" name="diet">Diet:</label>
-      <label><input type="number" class="form-control" placeholder="Target Daily Calories (Ex: 2000)" aria-label="targetcal" aria-describedby="button-addon2" name="targetcal"> Target Calories:</label>
-              <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Generate</button>
-        </div>          
-    </div>
-</form>
+<div class="generate">
+    <form class="form-group d-flex justify-content-center md-form form-sm active-purple active-purple-2 mt-2" action="users/{{g.user.id}}/plan-details" method="GET">
+        
 
-{% endblock %}
+        <input class="form-control form-control-sm ml-3 w-75" type="text" placeholder="Exclude Ingedient (Ex: olive, fish)"
+                 aria-label="exclude" name="exclude">
+
+        <input class="form-control form-control-sm ml-3 w-75" type="text" placeholder="Select a Diet (Ex: keto)"
+         aria-label="diet" name="diet">
+
+
+        <input class="form-control form-control-sm ml-3 w-75" type="number" placeholder="Target Calories (Ex: 2000)"
+         aria-label="targetcal" name="targetcal">
+
+
+            <button class="btn btn-outline-success btn-rounded btn-sm my-0 d-flex" type="submit" id="button-addon2"> Generate </button>
+
+      </form>
+
+
+</div>
+
+
+{% endblock %}`
