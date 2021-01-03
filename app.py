@@ -79,12 +79,9 @@ def homepage():
 def signUp():
     """Register a user: produce form and handle form submission."""
 
-##    if "username" in session:
-  ##      return redirect("/search")
 
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
-   ## if g.user:
 
     form = UserForm()
 
@@ -99,8 +96,6 @@ def signUp():
 
             db.session.commit()
         
-     ##  user = User.register(username, password, name, email)
-    ##  session['username'] = user.username
         except IntegrityError as e:
             flash ("Username already used", "danger")
             return render_template('users/register.html', form=form)
@@ -214,7 +209,7 @@ def search_recipes(user_id):
         return redirect("/")
 
     querysearch = request.args['q']
-    querys = {"query":querysearch, "number":"6", "addRecipeInformation":"true", "sort":"random"}
+    querys = {"query":querysearch, "number":"9", "addRecipeInformation":"true", "sort":"random"}
     response = requests.get(f'{url}{find}{key}', params=querys)
     res = response.json()
     data = res["results"]
