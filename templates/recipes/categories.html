@@ -2,17 +2,17 @@
 
 {% block body %}
 
-<h1>Show all the food categories!</h1>
+<h5 style="text-decoration:none; color: rgb(39, 177, 12)">My Food Categories:</h5>
 
-<ul>
+<ul class="list-group">
 {% for category in categories %}
-  <li>
-     <a href="/users/{{ g.user.id }}/categories/{{ category.id }}">{{ category.title }}</a>
+  <li class="list-group-item">
+     <a href="/users/{{ g.user.id }}/categories/{{ category.id }}" style="text-decoration:none; color: rgb(39, 177, 12)">{{ category.title }}</a>
   </li>
 {% endfor %}
+
+
+<p><a class="btn btn-outline-success btn-rounded btn-sm my-0" href="/users/{{ g.user.id }}/categories/add">Add a category</a></p>
 </ul>
-
-<p><a class="btn btn-primary" href="/users/{{ g.user.id }}/categories/add">Add a category</a></p>
-
 {% endblock %}
 

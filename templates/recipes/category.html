@@ -3,30 +3,33 @@
 {% block body %}
 
 <div class="jumbotron">
-  <h1>{{ category.title }}!</h1>
+  <h5>
+  <li style="text-decoration:none; color: rgb(39, 177, 12)">{{ category.title }}</li>
+  </h5>
   {% if category.description %}
   <p class="lead">{{ category.description }}</p>
   {% endif %}
 </div>
 
+
 {% for recipe in category.recipes %}
-<p>
-  <b>Recipe:</b>
-  <a href="/users/{{ g.user.id }}/recipes/{{ recipe.id }}">{{ recipe.title }}</a>
-</p>
+<li style="text-decoration:none; color: rgb(23, 107, 6)" class="list-group-item-action">
+  <a href="/users/{{ g.user.id }}/recipes/{{ recipe.id }}" style="text-decoration:none; color: rgb(39, 177, 12)">{{ recipe.title }}</a>
+</li>
 {% endfor %}
 
-<p>
-  <a class="btn btn-primary" href="/users/{{ g.user.id }}/categories/{{ category.id }}/add-recipe">
+
+<br>
+  <a class="btn btn-outline-success btn-rounded btn-sm my-0" href="/users/{{ g.user.id }}/categories/{{ category.id }}/add-recipe">
   Add a recipe</a>
-</p>
+
 
 
 
 {% if g.user.id == category.user_id %}
 <form method="POST"
       action="/users/{{ g.user.id }}/categories/{{ category.id }}/delete">
-  <button class="btn btn-outline-danger">Delete Category!</button>
+  <button class="btn btn-outline-danger btn-rounded btn-sm my-0">Delete Category!</button>
 </form>
 {% endif %}
 
