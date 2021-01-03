@@ -5,8 +5,7 @@ Create User
 {% endblock %}
 
 {% block body %}
-
-<h1>Login a user</h1>
+<div class="login-page">
 <form method="POST">
 
   {{form.hidden_tag()}}
@@ -32,7 +31,7 @@ Create User
 
   {% endfor %}
 
-  <button class="btn btn-primary">Login!</button>
+  <button class="btn btn-success btn-lg">Login!</button>
 </form>
-
+</div>
 {% endblock %}
