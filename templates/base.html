@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>
-    Weekly Planner &ndash; {% block title %}{% endblock %}
+    Meal Planner &ndash; {% block title %}{% endblock %}
   </title>
   <link rel="stylesheet"
         href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
-  <link rel="stylesheet" href="static/style.css">
+  <link rel="stylesheet"  type='text/css' href="../static/style.css">
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
@@ -27,17 +27,26 @@
     <div class="navbar-header">
   <a class="navbar-brand" href="/"> <span>Meal Planner</span></a>
     </div> 
-  <ul class="nav navbar-nav navbar-left">
+ 
+
+    <ul class='nav navbar-nav navbar-right'>
     {% if not g.user %}
-      <li><a href="/login">Log in</a></li>
-      <li><a href="/register">Sign up</a></li>
+    <ul class='nav navbar-nav navbar-right'>
+      <li class='nav-item nav-link btn-outline-success'>
+        <a href="/login" style="text-decoration:none; color: rgb(255, 255, 255)">Log in</a>
+      </li>
+
+      <li class="nav-item nav-link btn-outline-success">
+        <a href="/register" style="text-decoration:none; color: rgb(255, 255, 255)">Sign up</a>
+      </li>
+    </ul>
       {% else %}
 
     <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn dropdown-toggle" style="background-color: #628057" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fa fa-user"></i>
     </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <div class="dropdown-menu" style="background-color: #628057"  aria-labelledby="dropdownMenuButton">
         <a class="dropdown-item" href="/users/{{ g.user.id }}">{{ g.user.username }}</a>
         <a class="dropdown-item" href="/users/{{ g.user.id }}/categories">Categories</a>
         <a class="dropdown-item" href="/users/{{ g.user.id }}/recipes">My Favirote Recipes</a>
