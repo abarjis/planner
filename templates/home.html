@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
-{% block title %} Weekly Planner {% endblock %}
+{% block title %} Meal Planner {% endblock %}
 {% block body %}
 
 
-<div>
+<div class="home-page">
     <form class="form-inline d-flex justify-content-center md-form form-sm active-purple active-purple-2 mt-2" action="users/{{g.user.id}}/search" method="GET">
         
         <input class="form-control form-control-sm ml-3 w-75" type="search" placeholder="Search Over 300.000 Recipes"
         aria-label="Search" name="q">
 
-            <button class="btn btn-outline-secondary" type="submit" id="button-addon2"> <i class="fa fa-search" aria-hidden="true">
+            <button class="btn btn-success" type="submit" id="button-addon2"> <i class="fa fa-search" aria-hidden="true">
             </i> </button>
 
       </form>
