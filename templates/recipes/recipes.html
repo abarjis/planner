@@ -2,15 +2,15 @@
 
 {% block body %}
 
-<h1>My favirate recipes!</h1>
+<h5 style="text-decoration:none; color: rgb(39, 177, 12)">My favirate recipes:</h5>
 
-<ul>
+<ul class="list-group">
 {% for recipe in recipes %}
-  <li><a href="/users/{{ g.user.id }}/recipes/{{ recipe.id }}"> {{ recipe.title }} </a></li>
+  <li class="list-group-item list-group-sm"><a href="/users/{{ g.user.id }}/recipes/{{ recipe.id }}" style="text-decoration:none; color: rgb(39, 177, 12)"> {{ recipe.title }} </a></li>
 {% endfor %}
 </ul>
 
-<p><a class="btn btn-primary" href="/users/{{ g.user.id }}/recipes/add">Add a recipe</a></p>
+<p><a class="btn btn-outline-success btn-rounded btn-sm my-0" href="/users/{{ g.user.id }}/recipes/add">Add a recipe</a></p>
 
 
 {% endblock %}

@@ -3,7 +3,7 @@
 {% block body %}
 
 <div class="jumbotron">
-  <h1>{{ recipe.title }}!</h1>
+ <h5> <li style="text-decoration:none; color: rgb(39, 177, 12)">{{ recipe.title }}</li> </h5>
   {% if recipe.description %}
   <p class="lead">{{ recipe.description }}</p>
   {% endif %}
@@ -12,7 +12,7 @@
 {% if g.user.id == recipe.user_id %}
 <form method="POST"
       action="/users/{{ g.user.id }}/recipes/{{ recipe.id }}/delete">
-  <button class="btn btn-outline-danger">Delete</button>
+  <button class="btn btn-outline-danger btn-rounded btn-sm my-0">Delete</button>
 </form>
 {% endif %}
 
