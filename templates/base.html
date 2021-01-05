@@ -44,19 +44,31 @@
 
     <div class="dropdown">
       <button class="btn dropdown-toggle" style="background-color: #628057" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-user"></i>
+        <i style="text-decoration:none; color: rgb(255, 255, 255)" class="fa fa-user"></i>
     </button>
       <div class="dropdown-menu" style="background-color: #628057"  aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="/users/{{ g.user.id }}">{{ g.user.username }}</a>
-        <a class="dropdown-item" href="/users/{{ g.user.id }}/categories">Categories</a>
-        <a class="dropdown-item" href="/users/{{ g.user.id }}/recipes">My Favirote Recipes</a>
-        <a class="dropdown-item" href="/users/{{ g.user.id }}/generate-plan">Generate Daily Plan</a>
-        <a class="dropdown-item" href="/logout">Log out</a>
+        <a class="dropdown-item" style="text-decoration:none; color: rgb(255, 255, 255)" href="/users/{{ g.user.id }}" >{{ g.user.username }}</a>
+        <a class="dropdown-item" style="text-decoration:none; color: rgb(255, 255, 255)" href="/users/{{ g.user.id }}/categories">Categories</a>
+        <a class="dropdown-item" style="text-decoration:none; color: rgb(255, 255, 255)" href="/users/{{ g.user.id }}/recipes">My Favirote Recipes</a>
+        <a class="dropdown-item" style="text-decoration:none; color: rgb(255, 255, 255)" href="/users/{{ g.user.id }}/generate-plan">Generate Daily Plan</a>
+        <a class="dropdown-item" style="text-decoration:none; color: rgb(255, 255, 255)" href="/logout">Log out</a>
       </div>
     </div>
 
+
+    
+      <form class="form-inline md-form form-sm active-purple active-purple-2" action="users/{{g.user.id}}/search" method="GET">
+      <input class="form-control form-control-sm ml-3 w-75" type="search" placeholder="Search Recipes" aria-label="Search" name="q">
+    
+        <button class="btn btn-success my-2 my-sm-0" type="submit"><i class="fa fa-search" aria-hidden="true">
+        </i></button>
+      </form>
+
+
+
       {% endif %}
   </ul>
+
   </div>
 
 </nav>
