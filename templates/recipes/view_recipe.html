@@ -4,8 +4,8 @@
 
 <div class="jumbotron">
  <h5> <li style="text-decoration:none; color: rgb(39, 177, 12)">{{ recipe.title }}</li> </h5>
-  {% if recipe.description %}
-  <p class="lead">{{ recipe.description }}</p>
+  {% if recipe.summary %}
+  <p class="lead" style="font-size:15px; color: rgb(39, 119, 23)"><b>{{ recipe.summary | safe }}</b></p>
   {% endif %}
 </div>
 

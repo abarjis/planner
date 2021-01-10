@@ -3,34 +3,32 @@
 {% block body %}
 
 <div class="jumbotron">
-  <h5>
-  <li style="text-decoration:none; color: rgb(39, 177, 12)">{{ category.title }}</li>
-  </h5>
+  <h5> <li style="text-decoration:none; color: rgb(39, 177, 12)">{{ category.title }}</li> </h5>
   {% if category.description %}
-  <p class="lead">{{ category.description }}</p>
+  <p class="lead" style="font-size:16px; color: rgb(39, 119, 23)">{{ category.description }}</p>
   {% endif %}
 </div>
 
 
-{% for recipe in category.recipes %}
+{% for cat_recipe in cat_recipes %}
 <li style="text-decoration:none; color: rgb(23, 107, 6)" class="list-group-item-action">
-  <a href="/users/{{ g.user.id }}/recipes/{{ recipe.id }}" style="text-decoration:none; color: rgb(39, 177, 12)">{{ recipe.title }}</a>
+  <a href="/users/{{ g.user.id }}/categories/{{ category.id }}/cat_recipes/{{ cat_recipe.id }}" style="text-decoration:none; color: rgb(39, 177, 12)">{{ cat_recipe.recipe_id['title'] }}</a>
 </li>
 {% endfor %}
 
 
 <br>
-  <a class="btn btn-outline-success btn-rounded btn-sm my-0" href="/users/{{ g.user.id }}/categories/{{ category.id }}/add-recipe">
-  Add a recipe</a>
-
-
+<div>
+<a class="btn btn-outline-success" href="/users/{{ g.user.id }}/categories/{{ category.id }}/cat_recipes/add_saved_recipe">
+  Add a saved recipe</a><br>
 
 
 {% if g.user.id == category.user_id %}
-<form method="POST"
-      action="/users/{{ g.user.id }}/categories/{{ category.id }}/delete">
-  <button class="btn btn-outline-danger btn-rounded btn-sm my-0">Delete Category!</button>
+<form method="POST" action="/users/{{ g.user.id }}/categories/{{ category.id }}/delete">
+  <button class="btn btn-outline-danger">Delete this Category!</button>
 </form>
 {% endif %}
+</div>
+
 
 {% endblock %}
