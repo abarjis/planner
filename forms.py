@@ -41,9 +41,9 @@ class LoginForm(FlaskForm):
 class UserEditForm(FlaskForm):
     """Form for editing users."""
 
-    username = StringField('Username', validators=[DataRequired()])
-    name = StringField("Name", validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    username = StringField('Username:', validators=[DataRequired()])
+    name = StringField("Name:", validators=[DataRequired()])
+    email = StringField('Email:', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[Length(min=6)])
 
 
@@ -60,11 +60,11 @@ class RecipeForm(FlaskForm):
     """Form for adding recipes."""
     title = StringField("Recipe Title", validators=[
                        InputRequired(message="recipe title cannot be empty")])
-    description = StringField("Discription", validators=[Optional()])
+    summary = StringField("Summary", validators=[Optional()])
 
 
 
 class NewRecipeForCategoryForm(FlaskForm):
     """Form for adding a recipe to a catrgory."""
 
-    recipe = SelectField('Recipe To Add', coerce=int)
+    recipe = SelectField('Recipes To Add', coerce=int)
