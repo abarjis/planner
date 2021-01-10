@@ -20,33 +20,29 @@ class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String, nullable=False, unique=True)
+    username = db.Column(db.String, unique=True)
     password = db.Column(db.Text, nullable=False)
-    name = db.Column(db.String, nullable=False)
+    name = db.Column(db.String)
     email = db.Column(db.String(50), nullable=False, unique=True)
-    apihash = db.Column(db.Text, nullable=False)
-    apiuser = db.Column( db.String, nullable=False, unique=True)
+    is_admin = db.Column(db.Boolean, default=False)
 
-    categories = db.relationship("Category", backref="users")
-    recipes = db.relationship("Recipe", backref="users")
-    category_recipes = db.relationship('CatRecipes', backref='users')
+    categories = db.relationship("Category", backref="users", cascade="all, delete-orphan")
+    recipes = db.relationship("Recipe",  backref="users", cascade="all, delete-orphan")
+
 
  
     @classmethod
     def register(cls, username, password, name, email):
         """Register a user, hashing their password."""
         
-        res = requests.post(f'{url}{connect_user}{key}', json={})
-        reshashed = res.json()
+
         hashed = bcrypt.generate_password_hash(password).decode('UTF-8')
 
         user = User(
             username=username,
             password=hashed,
             name=name,
-            email=email,
-            apiuser=reshashed["username"],
-            apihash=reshashed["hash"]
+            email=email
         )
 
         db.session.add(user)
@@ -72,7 +68,7 @@ class Category(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.Text, nullable=False)
-    description = db.Column(db.Text, nullable=True)
+    description = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     recipes = db.relationship(
@@ -87,11 +83,23 @@ class Recipe(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.Text, nullable=False)
-    description = db.Column(db.Text, nullable=True)
-    recipe_id = db.Column(db.Integer, nullable=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    summary = db.Column(db.Text)
+    recipe_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
     assignments = db.relationship('CatRecipes', backref='recipes')
+
+
+    def to_dict(self):
+        """Serialize recipe to a dict of recipe info."""
+
+        return {
+            "id": self.id,
+            "title": self.title,
+            "summary": self.summary,
+            "recipe_id": self.recipe_id,
+            "user_id": self.user_id,
+        }
 
 
 class CatRecipes(db.Model):
@@ -99,9 +107,9 @@ class CatRecipes(db.Model):
 
     __tablename__ = "category_recipes"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
-    recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'))
+  ##  user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
 
 
@@ -120,15 +128,6 @@ def connect_db(app):
 
 
 """
-    def serialize(self):
-        Returns a dict representation of todo which we can turn into JSON
-        return {
-            'id': self.id,
-            'user_title': self.recipe_title,
-            'user_id': self.user_id,
-            'recipe_id': self.recipe_id,
-            'recipe_url': self.recipe_url
-        }
 
     def __repr__(self):
         return f"<Recipe {self.id} recipe_title={self.user_title} user_id={self.user_id} recipe_id={self.recipe_id} recipe_url={self.recipe_url}>"
