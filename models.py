@@ -28,8 +28,23 @@ class User(db.Model):
 
     categories = db.relationship("Category", backref="users", cascade="all, delete-orphan")
     recipes = db.relationship("Recipe",  backref="users", cascade="all, delete-orphan")
+    myrecipes = db.relationship("MyRecipe",  backref="users", cascade="all, delete-orphan")
+    shopping_list = db.relationship("ShoppingList", backref="users", cascade="all, delete-orphan")
 
 
+
+    def serialize(self):
+        """ Serialize User instance for JSON """
+        return {
+            'id': self.id,
+            'username': self.username,
+            'name': self.name,
+            'email': self.email,
+            'is_admin': self.is_admin
+        }
+
+    def __repr__(self):
+        return f'<User: {self.username}>'
  
     @classmethod
     def register(cls, username, password, name, email):
@@ -61,6 +76,16 @@ class User(db.Model):
          
         return False
 
+
+##    recipes = db.relationship(
+##        'Recipe', secondary="category_recipes", backref="categories", cascade="all, delete-orphan")
+
+##    myrecipes = db.relationship(
+##        'MyRecipe', secondary="category_myrecipes", backref="categories", cascade="all, delete-orphan")
+
+
+
+
 class Category(db.Model):
     """Categories."""
     
@@ -69,17 +94,49 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.Text, nullable=False)
     description = db.Column(db.Text)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    recipes = db.relationship('Recipe', secondary="category_recipes", backref="category")
+    myrecipes = db.relationship('MyRecipe', secondary="category_myrecipes", backref="category")
 
-    recipes = db.relationship(
-        'Recipe', secondary="category_recipes", backref="categories")
+    assignments = db.relationship('CatRecipe', backref='category', cascade="save-update, merge," "delete, delete-orphan")
 
-    assignments = db.relationship('CatRecipes', backref='categories')
+    assignments2 = db.relationship('CatMyRecipe', backref='category', cascade="save-update, merge," "delete, delete-orphan")
+
+    
+
+class MyRecipe(db.Model):
+    """myrecipes."""
+    __tablename__ = "myrecipes"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.Text, nullable=False)
+    summary = db.Column(db.Text)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+
+    assignments = db.relationship('CatMyRecipe',  backref='myrecipe', cascade="save-update, merge," "delete, delete-orphan")
+
+##    categories = db.relationship('Category', secondary="category_myrecipes", backref="myrecipes")
+
+    def __repr__(self):
+        return f'<MyRecipe: {self.title}>'
+
+    def to_dict(self):
+        """Serialize recipe to a dict of recipe info."""
+
+        return {
+            "id": self.id,
+            "title": self.title,
+            "summary": self.summary,
+            "user_id": self.user_id,
+        }
+
+
+
+
 
 class Recipe(db.Model):
     """recipes."""
     __tablename__ = "recipes"
-
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.Text, nullable=False)
@@ -87,9 +144,16 @@ class Recipe(db.Model):
     recipe_id = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
-    assignments = db.relationship('CatRecipes', backref='recipes')
+    assignments = db.relationship('CatRecipe', backref='recipe', cascade="save-update, merge," "delete, delete-orphan")
+
+##    categories = db.relationship('Category', secondary="category_recipes", backref="recipes")
 
 
+##    assignments = db.relationship('CatRecipes', backref='recipes', cascade="all, delete-orphan")
+
+    def __repr__(self):
+        return f'<Recipe: {self.title}>'
+        
     def to_dict(self):
         """Serialize recipe to a dict of recipe info."""
 
@@ -102,14 +166,35 @@ class Recipe(db.Model):
         }
 
 
-class CatRecipes(db.Model):
-    """Mapping of a playlist to a song."""
+class CatRecipe(db.Model):
+    """Mapping of a category to a recipe."""
 
     __tablename__ = "category_recipes"
+ ##   id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), primary_key=True)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), primary_key=True)
+
+
+class CatMyRecipe(db.Model):
+    """Mapping of a category to a recipe."""
+
+    __tablename__ = "category_myrecipes"
+##    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), primary_key=True)
+    myrecipe_id = db.Column(db.Integer, db.ForeignKey('myrecipes.id'), primary_key=True)
+
+
+class ShoppingList(db.Model):
+
+    __tablename__ = "shopping_lists"
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
-    recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'))
-  ##  user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    item = db.Column(db.Text, nullable=False)
+    checked = db.Column(db.Boolean, default=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+
+
 
 
 
