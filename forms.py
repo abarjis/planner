@@ -56,7 +56,7 @@ class CategoryForm(FlaskForm):
    
 
 
-class RecipeForm(FlaskForm):
+class MyRecipeForm(FlaskForm):
     """Form for adding recipes."""
     title = StringField("Recipe Title", validators=[
                        InputRequired(message="recipe title cannot be empty")])
@@ -68,3 +68,8 @@ class NewRecipeForCategoryForm(FlaskForm):
     """Form for adding a recipe to a catrgory."""
 
     recipe = SelectField('Recipes To Add', coerce=int)
+
+
+
+class ShoppingListForm(FlaskForm):
+    item = StringField("Item", validators=[InputRequired()])
