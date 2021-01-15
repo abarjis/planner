@@ -7,15 +7,15 @@
     <form class="form-group d-flex justify-content-center md-form form-sm active-purple active-purple-2 mt-2" action="plan-details" method="GET">
         
 
-        <input class="form-control form-control-sm ml-3 w-75" type="text" placeholder="Exclude Ingedient (Ex: olive, fish)"
-                 aria-label="exclude" name="exclude">
+        <input class="form-control form-control-sm ml-3 w-75" type="search" placeholder="Exclude Ingedient (Ex: olive, fish)"
+                 aria-label="Search" id="exc" name="exc">
 
-        <input class="form-control form-control-sm ml-3 w-75" type="text" placeholder="Select a Diet (Ex: keto)"
-         aria-label="diet" name="diet">
+        <input class="form-control form-control-sm ml-3 w-75" type="search" placeholder="Select a Diet (Ex: keto)"
+         aria-label="Search" id="diet" name="diet">
 
 
-        <input class="form-control form-control-sm ml-3 w-75" type="number" placeholder="Target Calories (Ex: 2000)"
-         aria-label="targetcal" name="targetcal">
+        <input class="form-control form-control-sm ml-3 w-75" type="search" placeholder="Target Calories (Ex: 2000)"
+         aria-label="Search" id="cal" name="cal">
 
 
             <button class="btn btn-outline-success btn-rounded btn-sm my-0 d-flex" type="submit" id="button-addon2"> Generate </button>
@@ -25,5 +25,4 @@
 
 </div>
 
-
-{% endblock %}`
+{% endblock %}

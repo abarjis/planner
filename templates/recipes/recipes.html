@@ -9,8 +9,13 @@
   <li class="list-group-item list-group-sm"><a href="/users/{{ g.user.id }}/recipes/{{ recipe.id }}" style="text-decoration:none; color: rgb(39, 177, 12)"> {{ recipe.title }} </a></li>
 {% endfor %}
 </ul>
+<ul class="list-group">
+  {% for myrecipe in myrecipes %}
+    <li class="list-group-item list-group-sm"><a href="/users/{{ g.user.id }}/myrecipes/{{ myrecipe.id }}" style="text-decoration:none; color: rgb(39, 177, 12)"> {{ myrecipe.title }} </a></li>
+  {% endfor %}
+</ul>
 
-<p><a class="btn btn-outline-success btn-rounded btn-sm my-0" href="/users/{{ g.user.id }}/recipes/add">Add a recipe</a></p>
+<p><a class="btn btn-outline-success btn-rounded btn-sm my-0" href="/users/{{ g.user.id }}/myrecipes/add">Add a recipe</a></p>
 
 
 {% endblock %}

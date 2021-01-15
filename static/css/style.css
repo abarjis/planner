@@ -5,6 +5,13 @@ body {
 
 
 
+#formEdit {
+
+  display:none;
+  
+  }
+
+
 .navbar {
   background-color: #fff;
   height: 46px;
