@@ -6,7 +6,7 @@ async function favRecipe(evt){
   const summary = $('#myRecipes').data('summary')
   const user_id = $('#myRecipes').data('user_id')
 
-  await axios.post(`/users/${user_id}/fav_recipes/add_recipe`, {
+  await axios.post(`/users/${user_id}/recipes/add_recipe`, {
     recipe_id,
     recipe_title,
     summary,
@@ -18,32 +18,58 @@ $('#recipeForm').on("submit", favRecipe);
 $("#recipeForm").trigger("reset");
 
 
+$('.delete-recipe').click(deleteRecipe)
 
-
-
-/*$("#my_recipes").on("submit", async function (evt) {
-    evt.preventDefault();
-  
-
-    const recipe_id = $(this).data('recipe_id')
-    const recipe_title = $(this).data('recipe_title')
-    const recipe_desctiption = $(this).data('recipe_description')
-    const user_id = $(this).data('user_id')
-  
-    await axios.post(`/users/${data.user_id}/fav-recipe/add_recipe`, {
-      recipe_id,
-      recipe_title,
-      recipe_desctiption,
-      user_id
-    })
+async function deleteRecipe() {
+  const recipe_id = $(this).data('id')
+  const category_id = $(this).data('category_id')
+  const user_id = $(this).data('user_id')
+  await axios.delete(`/users/${user_id}/categories/${category_id}/recipes/${recipe_id}`)
+  $(this).parent().remove()
+}
 
 
 
 
-      data = {
-      "recipe_id": $('#myRecipes').data('recipe_id'),
-      "user_id": $('myRecipes').data('user_id'),
-      "recipe_title": $('myRecipes').data('recipe_title'),
-      "recipe_description": $('myRecipes').data('recipe_description')
-  }
-});*/
+
+//Shopping list Functions
+$('.delete-todo').click(deleteTodo)
+async function deleteTodo(){
+    const id = $(this).data('id')
+    const user = $(this).data('user')
+    await axios.post(`/users/${user}/shopping-list/${id}/delete`)
+    $(this).parent().remove()
+}
+
+$('.todo-item').click(markTodo)
+async function markTodo(){
+    const id = $(this).siblings('.delete-todo').data('id')
+    const user = $(this).siblings('.delete-todo').data('user')
+    await axios.post(`/users/${user}/shopping-list/${id}`)
+    $(this).siblings('.todo-text').toggleClass('checked')
+}
+
+
+
+
+$("#formButton").click(function(){
+  $("#formEdit").toggle();
+});
+
+async function editCatRecipe(evt) {
+  evt.preventDefault();
+  $('#formEdit').attr('disabled', true)
+  const category_id = $('#formEdit').data('category_id')
+  const user_id = $('#formEdit').data('user_id')
+	const title = $('#title').val()
+  const summary = $('#summary').val()
+
+	await axios.patch(`/users/${user_id}/categories/${category_id}`, {
+    title, 
+    summary })
+
+
+    $("#submitEdit").html("<h7>Edit Confirmed!</h7>");
+    }
+    $('#formEdit').on("submit", editCatRecipe);
+    $("#formEdit").trigger("reset");
