@@ -3,13 +3,14 @@ import os
 from flask import Flask, render_template, redirect, session, request, flash, g, abort, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from werkzeug.exceptions import Unauthorized
-from forms import UserForm, LoginForm, UserEditForm, CategoryForm, RecipeForm, NewRecipeForCategoryForm
+from forms import UserForm, LoginForm, UserEditForm, CategoryForm, MyRecipeForm, NewRecipeForCategoryForm, ShoppingListForm
 from flask_cors import CORS, cross_origin
 from sqlalchemy.exc import IntegrityError
 from secret import key
 import requests
+import simplejson as json
 
-from models import connect_db, db, User, Recipe, Category, CatRecipes
+from models import connect_db, db, User, Recipe, Category, ShoppingList, MyRecipe, CatRecipe, CatMyRecipe
 
 CURR_USER_KEY = "curr_user"
 
@@ -75,6 +76,13 @@ def homepage():
         return render_template('non-home.html')
 
 
+
+
+#####################################################
+##
+##         Handling User 
+##
+#####################################################
 
 @app.route('/register', methods=['GET', 'POST'])
 def signUp():
@@ -201,10 +209,14 @@ def delete_profile(user_id):
     return redirect("/register")
 
 
-
+###############################################################
+#
+#       Search and handle recipes
+#
+###############################################################
 @app.route('/users/<int:user_id>/search', methods=["GET"])
 def search_recipes(user_id):
-    
+    """Search For Recipes"""
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
@@ -221,7 +233,7 @@ def search_recipes(user_id):
 
 @app.route('/users/<int:user_id>/info', methods=["GET"])
 def recipe_info(user_id):
-
+    """ Show Recipe details """
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
@@ -241,47 +253,18 @@ def recipe_info(user_id):
     return render_template('recipes/info.html', recipe=recipe_info, user_id=user_id)
 
 
-@app.route('/users/<int:user_id>/fav_recipes', methods=['GET'])
+@app.route('/users/<int:user_id>/recipes', methods=['GET'])
 def fav_recipes(user_id):
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
-
-    fav_recipes = Recipe.query.filter_by(user_id=user_id)
-    return render_template("recipes/recipes.html", recipes=fav_recipes, user_id=user_id)
-    
-
-
-@app.route('/users/<int:user_id>/fav_recipes/add_recipe', methods=['POST'])
-def add_to_fav(user_id):
-
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
-
-    title = request.json['recipe_title']
-    recipe_id = request.json['recipe_id']
-    title = request.json['recipe_title']
-    summary = request.json['summary']
-
-    fav_recipe = Recipe(user_id=user_id, recipe_id=recipe_id, 
-    title=title, summary=summary)
-        
-    db.session.add(fav_recipe)
-    db.session.commit()    
-    
-    return (jsonify(fav_recipe=fav_recipe.to_dict()), 201)
-
-
-@app.route('/users/<int:user_id>/recipes', methods=["GET"])
-def recipes(user_id):
-    """Show my favirote recipes."""
+    """ Show all fav recipes  """
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
     recipes = Recipe.query.all()
-    return render_template('recipes/recipes.html', recipes=recipes, user_id=user_id)
+    myrecipes = MyRecipe.query.all()
+
+    return render_template("recipes/recipes.html", recipes=recipes, user_id=user_id, myrecipes=myrecipes)
+
 
 
 @app.route("/users/<int:user_id>/recipes/<int:recipe_id>")
@@ -294,27 +277,29 @@ def view_recipe(user_id, recipe_id):
 
     recipe = Recipe.query.get_or_404(recipe_id)
     return render_template('recipes/view_recipe.html', recipe=recipe, user_id=user_id)
-
-
-@app.route("/users/<int:user_id>/recipes/add", methods=["GET", "POST"])
-def add_recipe(user_id):
-    """Add your own new recipe to my fav recipes. """
     
+
+
+@app.route('/users/<int:user_id>/recipes/add_recipe', methods=['POST'])
+def add_to_fav(user_id):
+    """ add a searched recipe to fav recipes"""
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    form = RecipeForm()
-    if form.validate_on_submit():
-        title = form.title.data
-        summary = form.summary.data
+    title = request.json['recipe_title']
+    recipe_id = request.json['recipe_id']
+    title = request.json['recipe_title']
+    summary = request.json['summary']
 
-        recipe = Recipe(title=title, summary=summary, user_id=user_id)
-        db.session.add(recipe)
-        db.session.commit()
-        return redirect(f'/users/{user_id}/recipes')
-    else:
-        return render_template('recipes/new_recipe.html', form=form)
+    recipe = Recipe(user_id=user_id, recipe_id=recipe_id, 
+    title=title, summary=summary)
+        
+    db.session.add(recipe)
+    db.session.commit()    
+    
+    return (jsonify(fav_recipe=recipe.to_dict()), 201)
+
 
 
 @app.route('/users/<int:user_id>/recipes/<int:recipe_id>/delete', methods=["POST"])
@@ -337,6 +322,72 @@ def delete_recipe(user_id, recipe_id):
     return redirect(f"/users/{g.user.id}/recipes")
 
 
+
+
+
+@app.route("/users/<int:user_id>/myrecipes/<int:myrecipe_id>")
+def view_myrecipe(user_id, myrecipe_id):
+    """return a specific recipe"""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    myrecipe = MyRecipe.query.get_or_404(myrecipe_id)
+    return render_template('recipes/view_myrecipe.html', myrecipe=myrecipe, user_id=user_id)
+
+
+
+@app.route('/users/<int:user_id>/myrecipes/<int:myrecipe_id>/delete', methods=["POST"])
+def delete_myrecipe(user_id, myrecipe_id):
+    """Delete a recipe from my fav recipes."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    myrcp = MyRecipe.query.get_or_404(myrecipe_id)
+    if myrcp.user_id != g.user.id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    db.session.delete(myrcp)
+    db.session.commit()
+
+    flash("Recipe deleted.", "success")
+    return redirect(f"/users/{g.user.id}/recipes")
+
+
+
+
+
+@app.route("/users/<int:user_id>/myrecipes/add", methods=["GET", "POST"])
+def add_to_myrecipe(user_id):
+    """Add your own new recipe to my recipes.""" 
+    
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    form = MyRecipeForm()
+    if form.validate_on_submit():
+        title = form.title.data
+        summary = form.summary.data
+
+        myrecipe = MyRecipe(title=title, summary=summary, user_id=user_id)
+        db.session.add(myrecipe)
+        db.session.commit()
+        return redirect(f'/users/{user_id}/recipes')
+    else:
+        return render_template('recipes/new_recipe.html', form=form)
+
+
+
+#############################################################
+#
+#  Creating and Handling Categories!!
+#
+#############################################################
 
 
 @app.route("/users/<int:user_id>/categories")
@@ -403,31 +454,105 @@ def delete_category(user_id, category_id):
     return redirect(f"/users/{g.user.id}/categories")
 
 
-@app.route("/users/<int:user_id>/categories/<int:category_id>/cat_recipes")
-def show_all_cat_recipes(user_id):
-    """Return a list of categories."""
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
+################################################################
+#
+#            Handling Shopping List
+#
+################################################################
 
-    cat_recipes = catRecipes.query.all()
-    return render_template("recipes/cat_recipes.html", cat_recipes=cat_recipes)
-
-
-@app.route("/users/<int:user_id>/categories/<int:category_id>/cat_recipes/<int:cat_recipe_id>")
-def view_cat_recipe(user_id, cat_recipe_id):
-    """Show detail on specific category."""
+@app.route('/users/<int:user_id>/shopping-list', methods=['GET', 'POST'])
+def shopping_list(user_id):
 
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
+    
+    
+    form = ShoppingListForm()
+    if form.validate_on_submit():
+        new_item = ShoppingList(item=form.item.data, user_id=user_id)
+        db.session.add(new_item)
+        db.session.commit()
+        flash(f"Successfully created {new_item.item}!", "success")
+        return redirect(f'/users/{user_id}/shopping-list')
+    else:
+        shopping_list = ShoppingList.query.filter_by(user_id=user_id).order_by(ShoppingList.checked)
+        return render_template('recipes/shopping_list.html', form=form, todo_list=shopping_list)
 
-    cat_recipe = Category.query.get_or_404(cat_recipe_id)
-    return render_template('recipes/category.html', user_id=user_id, cat_recipe=cat_recipe)
+
+@app.route('/users/<int:user_id>/shopping-list/<int:list_id>/delete', methods=['POST'])
+def delete_todo(list_id, user_id):
+   
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    mark_item = ShoppingList.query.get_or_404(list_id)
+    
+    db.session.delete(mark_item)
+    db.session.commit()
+   
+    return redirect(f"/users/{user_id}/shopping-list")
+    
+
+
+@app.route('/users/<int:user_id>/shopping-list/<int:list_id>', methods=['POST'])
+def mark_todo(user_id, list_id):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    
+    todo = ShoppingList.query.get_or_404(list_id)
+    todo.checked = not todo.checked
+        
+    db.session.add(todo)
+    db.session.commit()
+    return redirect(f'/users/{user_id}/shopping-list')
+    
 
 
 
-@app.route("/users/<int:user_id>/categories/<int:category_id>/cat_recipes/add_saved_recipe", methods=["GET", "POST"])
+"""
+@app.route('/users/<int:user_id>/myrecipes', methods=["GET"])
+def myrecipes(user_id):
+    Show my own recipes
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    myrecipes = MyRecipe.query.all()
+    return render_template('recipes/recipes.html', myrecipes=myrecipes, user_id=user_id)
+"""
+
+
+
+
+
+
+
+
+"""
+
+
+@app.route('/users/<int:user_id>/categories/<int:category_id>/recipes/<int:recipe_id>', methods=["DELETE"])
+def delete_cat_recipe(user_id, category_id, recipe_id):
+    Deletes a particular recipe
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    category = Category.query.get_or_404(category_id)
+    (recipe_id for recipe in category.recipes)
+    ##cat_recipe = Recipe.query.get_or_404(recipe_id)
+    db.session.delete(recipe_id)
+    db.session.commit()
+
+    
+    return jsonify(message="deleted")
+"""
+
+
+@app.route("/users/<int:user_id>/categories/<int:category_id>/add_saved_recipe", methods=["GET", "POST"])
 def add_recipe_to_category(user_id, category_id):
     """Add recipe to a category and redirect to list."""
     
@@ -439,14 +564,46 @@ def add_recipe_to_category(user_id, category_id):
     form = NewRecipeForCategoryForm()
 
     curr_on_category = [r.id for r in category.recipes]
+       
     form.recipe.choices = (db.session.query(Recipe.id, Recipe.title)
                     .filter(Recipe.id.notin_(curr_on_category))
                     .all())
-
+    
     if form.validate_on_submit():
         
         recipe = Recipe.query.get(form.recipe.data)
         category.recipes.append(recipe)
+     
+        db.session.commit()
+
+        return redirect(f"/users/{user_id}/categories/{category_id}")
+
+    return render_template('recipes/add_recipe_to_category.html', category=category, form=form, user_id=user_id)
+
+
+
+
+@app.route("/users/<int:user_id>/categories/<int:category_id>/add_own_recipe", methods=["GET", "POST"])
+def add_your_own_recipe_to_category(user_id, category_id):
+    """Add recipe to a category and redirect to list."""
+    
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    category = Category.query.get_or_404(category_id)
+    form = NewRecipeForCategoryForm()
+
+    curr_on_category = [m.id for m in category.myrecipes]
+     
+    form.recipe.choices = (db.session.query(MyRecipe.id, MyRecipe.title)
+                    .filter(MyRecipe.id.notin_(curr_on_category))
+                    .all())
+
+    if form.validate_on_submit():
+        
+        myrecipe = MyRecipe.query.get(form.recipe.data)
+        category.myrecipes.append(myrecipe)
 
         db.session.commit()
 
@@ -455,9 +612,40 @@ def add_recipe_to_category(user_id, category_id):
     return render_template('recipes/add_recipe_to_category.html', category=category, form=form, user_id=user_id)
 
 
+
+@app.route('/users/<int:user_id>/categories/<int:category_id>', methods=["PATCH"])
+def update_category(user_id, category_id):
+    """Updates a particular todo and responds w/ JSON of that updated todo"""
+    
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    
+  
+    category = Category.query.get_or_404(category_id)
+    cat_recipes = [r.id for r in category.recipes]
+
+    recipe = Recipe.query.filter(Recipe.id.in_(cat_recipes)).first()
+    ##recipe = db.session.query(recipe_id).first()
+    ##recipe = Recipe.query.get(recipe_id).first()
+    recipe.title = request.json.get('title', recipe.title)
+    recipe.summary = request.json.get('summary',  recipe.summary)
+
+    db.session.add(category)
+    db.session.commit()
+    return jsonify(recipe=recipe.to_dict())
+
+
+
+
+
+
+
+
+"""
 @app.route('/users/<int:user_id>/categories/<int:category_id>/cat_recipes/<int:cat_recipe_id>/delete_recipe', methods=["POST"])
 def delete_cat_recipe(user_id, category_id, cat_recipe_id):
-    """Delete a category."""
+    Delete a category.
 
     if not g.user:
         flash("Access unauthorized.", "danger")
@@ -474,7 +662,7 @@ def delete_cat_recipe(user_id, category_id, cat_recipe_id):
     flash("Recipe deleted.", "danger")
     return redirect(f"/users/{g.user.id}/categories/{category_id}")
 
-
+"""
 
 @app.route('/users/<int:user_id>/generate-plan', methods=["GET"])
 def generate(user_id):
@@ -494,15 +682,22 @@ def plan_details(user_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    targetcal = request.args['targetcal']
+     
+    cal = request.args['cal']
     diet = request.args['diet']
-    exclude = request.args['exclude']
-    querys = {"targetCalories":targetcal, "diet":diet, "exclude":exclude, 'timeFrame':'day'}
+    exc = request.args['exc']
+    querys = {"timeFrame":"day", "targetCalories":cal, "diet":diet, "exclude":exc}
    
     response = requests.get(f'{url}{generate}{key}', params=querys)
+
+##    r = json.dumps(response)
+##    loaded_r = json.loads(r)
+
     res = response.json()
+ ##   data = res['meals']   
+
     
-    return render_template("recipes/plan_details.html", recipes=res, user_id=user_id, targetcal=targetcal, diet=diet, exclude=exclude)
+    return render_template("recipes/plan_details.html", recipes=res, user_id=user_id)
 
 
 if __name__ == '__main__':
