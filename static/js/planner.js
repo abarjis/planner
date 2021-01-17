@@ -21,7 +21,7 @@ $("#recipeForm").trigger("reset");
 $('.delete-recipe').click(deleteRecipe)
 
 async function deleteRecipe() {
-  const recipe_id = $(this).data('id')
+  const recipe_id = $(this).data('recipe_id')
   const category_id = $(this).data('category_id')
   const user_id = $(this).data('user_id')
   await axios.delete(`/users/${user_id}/categories/${category_id}/recipes/${recipe_id}`)
@@ -56,20 +56,29 @@ $("#formButton").click(function(){
   $("#formEdit").toggle();
 });
 
+
+
+
+
+//$('.formEdit').on("submit", editCatRecipe);
+
 async function editCatRecipe(evt) {
   evt.preventDefault();
-  $('#formEdit').attr('disabled', true)
+  $('.formEdit').attr('disabled', true)
   const category_id = $('#formEdit').data('category_id')
   const user_id = $('#formEdit').data('user_id')
+  const recipe_id = $('#formEdit').data('recipe_id')
 	const title = $('#title').val()
   const summary = $('#summary').val()
 
-	await axios.patch(`/users/${user_id}/categories/${category_id}`, {
+	await axios.patch(`/users/${user_id}/categories/${category_id}/edit`, {
+    recipe_id,
     title, 
     summary })
 
 
     $("#submitEdit").html("<h7>Edit Confirmed!</h7>");
     }
-    $('#formEdit').on("submit", editCatRecipe);
-    $("#formEdit").trigger("reset");
+    $('.formEdit').on("submit", editCatRecipe);
+    //$(this).siblings('#formEdit').on('submit', editCatRecipe)
+    $(".formEdit").trigger("reset");

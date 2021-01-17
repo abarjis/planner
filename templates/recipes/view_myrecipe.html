@@ -12,6 +12,10 @@
 </div>
 
 {% if g.user.id == myrecipe.user_id %}
+<form action="/users/{{ g.user.id }}/myrecipes/{{ myrecipe.id }}/edit">
+  <button class="btn btn-outline-danger btn-rounded btn-sm my-0">Edit</button>
+</form>
+
 <form method="POST"
       action="/users/{{ g.user.id }}/myrecipes/{{ myrecipe.id }}/delete">
   <button class="btn btn-outline-danger btn-rounded btn-sm my-0">Delete</button>
