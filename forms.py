@@ -50,10 +50,18 @@ class UserEditForm(FlaskForm):
 class CategoryForm(FlaskForm):
     """Form for adding categories."""
 
-    title = StringField("Category Name", validators=[
-                       InputRequired(message="Name cannot be empty")])
-    description = StringField("Category Description", validators=[Optional()])
+    title = StringField("title", validators=[
+                       InputRequired(message="title cannot be empty")])
+    description = StringField("description", validators=[Optional()])
    
+"""
+
+class CategoryEditForm(FlaskForm):
+    Form for updating categories
+
+    title = StringField("Category Name", validators=[DataRequired()])
+    description = StringField("Category Description", validators=[DataRequired()])
+"""
 
 
 class MyRecipeForm(FlaskForm):
