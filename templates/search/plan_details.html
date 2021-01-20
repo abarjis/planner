@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %} Meal Planner {% endblock %}
+{% block body %}
+
+
+<div style="margin-left:0;">
+{% if g.user %}
+
+<h3 style="text-decoration: none; color:rgb(39, 177, 12)"> Daily Plan Details: </h3>
+
+<div class="container-fluid">
+<div class="card-group">
+  <div class="card">
+    <div class="card-header" style="text-decoration: none; color:rgb(39, 177, 12)">
+      Breakfast
+    </div>
+       <div class="card-body">
+      <h5 class="card-title">{{recipes[0]['title']}}</h5>
+      <p class="card-text">Ready in {{recipes[0]['readyInMinutes']}} minutes</p>
+      <a href="{{recipes[0]['sourceUrl']}}" target="_blank" class="btn btn-primary">Recipe Details!</a>
+    </div>
+  </div>
+ 
+  <div class="card">
+    <div class="card-header" style="text-decoration: none; color:rgb(39, 177, 12)">
+      Lunch
+    </div>
+       <div class="card-body">
+      <h5 class="card-title">{{recipes[1]['title']}}</h5>
+      <p class="card-text">Ready in {{recipes[1]['readyInMinutes']}} minutes</p>
+      <a href="{{recipes[1]['sourceUrl']}}" target="_blank" class="btn btn-primary">Recipe Details!</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" style="text-decoration: none; color:rgb(39, 177, 12)">
+      Dinner
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">{{recipes[2]['title']}}</h5>
+      <p class="card-text">Ready in {{recipes[2]['readyInMinutes']}} minutes</p>
+      <a href="{{recipes[2]['sourceUrl']}}" target="_blank" class="btn btn-primary">Recipe Details!</a>
+    </div>
+  </div>
+</div>
+</div>
+
+{% endif %}
+</div>
+
+
+
+<form id="generatePlanForm" method="POST">
+  <button id="plan" class="btn btn-success mt-4" data-breakfast_id="{{recipes[0]['id']}}" data-lunch_id="{{recipes[1]['id']}}" data-dinner_id="{{recipes[2]['id']}}"
+   data-breakfast_title="{{recipes[0]['title']}}" data-lunch_title="{{recipes[1]['title']}}" data-dinner_title="{{recipes[2]['title']}}"
+    data-breakfast_readyin="{{recipes[0]['readyInMinutes']}}" data-lunch_readyin="{{recipes[1]['readyInMinutes']}}" data-dinner_readyin="{{recipes[2]['readyInMinutes']}}"
+     data-breakfast_url="{{recipes[0]['sourceUrl']}}" data-lunch_url="{{recipes[1]['sourceUrl']}}" data-dinner_url="{{recipes[2]['sourceUrl']}}" data-user_id="{{user_id}}">Save my recipes</button>
+</form><br>
+
+{% endblock %}

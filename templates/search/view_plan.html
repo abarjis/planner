@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %} Meal Planner {% endblock %}
+{% block body %}
+
+
+<div style="margin-left:0;">
+{% if g.user %}
+{% if not meal_plan %}
+
+<h5 style="text-decoration: none; color:rgb(39, 177, 12)">You have no saved meals! <a href="/users/{{ g.user.id }}/generate">Click here to generate meals!</a></h5>
+
+{% elif meal_plan %}
+
+<h3 style="text-decoration: none; color:rgb(39, 177, 12)"> Daily Plan Details: </h3>
+
+<div class="container-fluid">
+<div class="card-group">
+  <div class="card">
+    <div class="card-header" style="text-decoration: none; color:rgb(39, 177, 12)">
+      Breakfast
+    </div>
+       <div class="card-body">
+      <h5 class="card-title" style="text-decoration: none; color:rgb(30, 124, 11)">{{meal_plan.breakfast_title}}</h5>
+      <p class="card-text" style="text-decoration: none; color:rgb(30, 134, 9)">Ready in {{meal_plan.breakfast_readyin}} minutes</p>
+      <a href="{{meal_plan.breakfast_url}}" target="_blank" class="btn btn-outline-success">Recipe Details!</a>
+    </div>
+  </div>
+ 
+  <div class="card">
+    <div class="card-header" style="text-decoration: none; color:rgb(39, 177, 12)">
+      Lunch
+    </div>
+       <div class="card-body">
+      <h5 class="card-title" style="text-decoration: none; color:rgb(30, 124, 11)">{{meal_plan.lunch_title}}</h5>
+      <p class="card-text" style="text-decoration: none; color:rgb(30, 134, 9)">Ready in {{meal_plan.lunch_readyin}} minutes</p>
+      <a href="{{meal_plan.lunch_url}}" target="_blank" class="btn btn-outline-success">Recipe Details!</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" style="text-decoration: none; color:rgb(39, 177, 12)">
+      Dinner
+    </div>
+    <div class="card-body">
+      <h5 class="card-title" style="text-decoration: none; color:rgb(30, 124, 11)">{{meal_plan.dinner_title}}</h5>
+      <p class="card-text" style="text-decoration: none; color:rgb(30, 134, 9)">Ready in {{meal_plan.dinner_readyin}} minutes</p>
+      <a href="{{meal_plan.dinner_url}}" target="_blank" class="btn btn-outline-success">Recipe Details!</a>
+    </div>
+  </div>
+</div>
+</div>
+
+{% endif %}
+{% endif %}
+</div>
+
+
+{% endblock %}
