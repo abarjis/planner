@@ -1,6 +1,6 @@
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
-from forms import UserForm, LoginForm
+
 from secret import key
 import requests
 
@@ -8,6 +8,10 @@ import requests
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
+
+
+
+
 
 url = "https://api.spoonacular.com/"
 
@@ -30,6 +34,8 @@ class User(db.Model):
     recipes = db.relationship("Recipe",  backref="users", cascade="all, delete-orphan")
     myrecipes = db.relationship("MyRecipe",  backref="users", cascade="all, delete-orphan")
     shopping_list = db.relationship("ShoppingList", backref="users", cascade="all, delete-orphan")
+    meal_plan = db.relationship("MealPlan", backref="users", cascade="all, delete-orphan")
+
 
 
 
@@ -86,6 +92,7 @@ class User(db.Model):
 
 
 
+
 class Category(db.Model):
     """Categories."""
     
@@ -102,7 +109,11 @@ class Category(db.Model):
 
     assignments2 = db.relationship('CatMyRecipe', backref='category', cascade="save-update, merge," "delete, delete-orphan")
 
+    def __repr__(self):
+        return f'{int(self.recipes.id) (self.title)}'
+
     
+      
 
 class MyRecipe(db.Model):
     """myrecipes."""
@@ -195,6 +206,43 @@ class ShoppingList(db.Model):
 
 
 
+class MealPlan(db.Model):
+    
+    __tablename__ = "meal_plan"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    breakfast_id = db.Column(db.Integer)
+    breakfast_title = db.Column(db.Text)
+    breakfast_readyin = db.Column(db.Integer)
+    breakfast_url = db.Column(db.Text)
+    lunch_id = db.Column(db.Integer)
+    lunch_title = db.Column(db.Text)
+    lunch_readyin = db.Column(db.Integer)
+    lunch_url = db.Column(db.Text)
+    dinner_id = db.Column(db.Integer)
+    dinner_title = db.Column(db.Text)
+    dinner_readyin = db.Column(db.Integer)
+    dinner_url = db.Column(db.Text)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    def to_dict(self):
+        """Serialize recipe to a dict of recipe info."""
+
+        return {
+            "id": self.id,
+            "breakfast_id": self.breakfast_id,
+            "breakfast_title": self.breakfast_title,
+            "breakfast_readyin": self.breakfast_readyin,
+            "breakfast_url": self.breakfast_url,
+            "lunch_id": self.lunch_id,
+            "lunch_title": self.lunch_title,
+            "lunch_readyin": self.lunch_readyin,
+            "lunch_url": self.lunch_url,
+            "dinner_id": self.dinner_id,
+            "dinner_title": self.dinner_title,
+            "dinner_readyin": self.dinner_readyin,
+            "dinner_url": self.dinner_url
+        }
 
 
 
