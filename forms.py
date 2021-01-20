@@ -81,3 +81,11 @@ class NewRecipeForCategoryForm(FlaskForm):
 
 class ShoppingListForm(FlaskForm):
     item = StringField("Item", validators=[InputRequired()])
+
+
+class GeneratePlanForm(FlaskForm):
+    diet = StringField("Diet", validators=[InputRequired(), Length(min=2, max=30)])
+    exclude = StringField("Exclude", validators=[InputRequired(), Length(max=50)])
+    calories = StringField("Target Calories", validators=[InputRequired(), Length(max=5)])
+
+    

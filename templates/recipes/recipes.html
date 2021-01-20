@@ -22,4 +22,10 @@
 <a class="btn btn-outline-success btn-rounded btn-sm my-0" href="/users/{{ g.user.id }}/myrecipes/add">Add a recipe</a>
 
 
+
+<form method="POST"
+      action="/users/{{ g.user.id }}/recipes/delete">
+  <button class="btn btn-outline-danger btn-rounded btn-sm my-0">Delete</button>
+</form>
+
 {% endblock %}

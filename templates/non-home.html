@@ -1,9 +1,41 @@
 {% extends 'base.html' %}
 {% block body %}
   <div class="non-home">
-    <h1>What are you craving today?</h1>
-    <h4>New to recipe planner?</h4>
-    <p>Sign up now and create your own daily meals planner!</p>
-    <a href="/register" class="btn btn-outline-secondary">Sign up</a>
+
+<div class="card-transperent">
+  <div class="card-body">
+    <h4 class="card-title">New to meal planner?</h4>
+    <h5>What are you craving today?</h5>
+    <h6>Enjoy many features to help you plan your meals:</h6>
+    <p class="card-text">
+      <li>Search over 300,000 recipes.</li>
+      <li>Save your favorite recipes or create your own recipe.</li>
+      <li>Create custom categories and add recipes.</li>
+      <li>Generate a personlized daily meals.</li>
+      <li>Create your shopping list.</li>
+    </p>
+    <a href="/register" class="btn btn-outline-success">Sign up now!</a>
   </div>
+  <div class="card-footer text-muted">
+    Already a user? <a href="/login" class="text">Log in!</a>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
 {% endblock %}

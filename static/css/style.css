@@ -59,8 +59,8 @@ background-size: cover;
 text-align: center;
 padding: 1rem;
 flex-direction: column;
-color: #66757f;
-text-shadow: 0 0 8px #fff;
+color: #0f8f0f;
+text-shadow: 6px 6px 10px rgb(255, 255, 255);
 }
 
 
