@@ -2,16 +2,16 @@
 
 {% block body %}
 
-<h5 style="text-decoration:none; color: rgb(39, 177, 12)">Recipes you searched:</h5>
+<h5 style="text-decoration:none; color: rgb(39, 177, 12)">Recipes You Saved:</h5>
 
 <ul class="list-group">
 {% for recipe in recipes %}
   <li class="list-group-item list-group-sm"><a href="/users/{{ g.user.id }}/recipes/{{ recipe.id }}" style="text-decoration:none; color: rgb(39, 177, 12)"> {{ recipe.title }} </a></li>
 {% endfor %}
 </ul>
-<a class="btn btn-outline-success btn-rounded btn-sm my-0" href="/">Search more recipes</a><br>
+<a class="btn btn-outline-success btn-rounded btn-sm my-0" href="/">Search More Recipes</a><br>
 
-<br><h5 style="text-decoration:none; color: rgb(39, 177, 12)">Recipes you created:</h5>
+<br><h5 style="text-decoration:none; color: rgb(39, 177, 12)">Recipes You Created:</h5>
 
 <ul class="list-group">
   {% for myrecipe in myrecipes %}
@@ -19,13 +19,16 @@
   {% endfor %}
 </ul>
 
-<a class="btn btn-outline-success btn-rounded btn-sm my-0" href="/users/{{ g.user.id }}/myrecipes/add">Add a recipe</a>
+<a class="btn btn-outline-success btn-rounded btn-sm my-0" href="/users/{{ g.user.id }}/myrecipes/add">Add New Recipe</a>
+<br>
 
 
-
+<div class="border border-light p-3 mb-4">
+      <div class="text-center">
 <form method="POST"
       action="/users/{{ g.user.id }}/recipes/delete">
-  <button class="btn btn-outline-danger btn-rounded btn-sm my-0">Delete</button>
+  <button class="btn btn-outline-danger btn-rounded btn-sm my-0">Delete All Recipes</button>
 </form>
-
+      </div>
+      </div>
 {% endblock %}

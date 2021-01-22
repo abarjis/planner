@@ -10,46 +10,47 @@
 </div>
 
 <div>
-<h5 style="text-decoration:none; color: rgb(39, 177, 12)">Recipes you searched:</h5>
+<h6 style="text-decoration:none; color: rgb(39, 177, 12)">Recipes You Saved:</h6>
 {% for recipe in category.recipes %}
 <li style="text-decoration:none; color: rgb(23, 107, 6)" class="list-group-item-action">
   <a href="/users/{{ g.user.id }}/recipes/{{ recipe.id }}" style="text-decoration:none; color: rgb(39, 177, 12)">{{ recipe.title }}</a>
-  <a class="btn btn-danger delete-recipe" data-recipe_id="{{recipe.id}}" data-category_id="{{category.id}}" data-user_id="{{g.user['id']}}">X</a>
+  <a class="btn btn-danger btn-sm delete-recipe" data-recipe_id="{{recipe.id}}" data-category_id="{{category.id}}" data-user_id="{{g.user['id']}}">X</a>
 </li>
 {% endfor %}
 <br>
 
-<a class="btn btn-outline-success" href="/users/{{ g.user.id }}/categories/{{ category.id }}/add_saved_recipe">
-  Add a recipe from your saved recipes</a><br>
+<a class="btn btn-outline-success btn-sm" href="/users/{{ g.user.id }}/categories/{{ category.id }}/add_saved_recipe">
+  Add From Saved Recipes</a><br>
 </div>
 <br>
 
 <div>
-<h5 style="text-decoration:none; color: rgb(39, 177, 12)">Recipes you created:</h5>
+<h6 style="text-decoration:none; color: rgb(39, 177, 12)">Recipes You Created:</h6>
 {% for myrecipe in category.myrecipes %}
 <li style="text-decoration:none; color: rgb(23, 107, 6)" class="list-group-item-action">
   <a href="/users/{{ g.user.id }}/myrecipes/{{ myrecipe.id }}" style="text-decoration:none; color: rgb(39, 177, 12)">{{ myrecipe.title }}</a>
-  <a class="btn btn-danger delete-myrecipe" data-myrecipe_id="{{myrecipe.id}}" data-category_id="{{category.id}}" data-user_id="{{g.user['id']}}">X</a>
+  <a class="btn btn-danger btn-sm delete-myrecipe" data-myrecipe_id="{{myrecipe.id}}" data-category_id="{{category.id}}" data-user_id="{{g.user['id']}}">X</a>
 </li>
 {% endfor %}
 <br>
 
-<a class="btn btn-outline-success" href="/users/{{ g.user.id }}/categories/{{ category.id }}/add_own_recipe">
+<a class="btn btn-outline-success btn-sm" href="/users/{{ g.user.id }}/categories/{{ category.id }}/add_own_recipe">
   Add a recipe from your created recipes</a><br>
 </div>
 <br>
 
-<div>
+<div class="border border-light p-3 mb-4">
+  <div class="text-center">
 {% if g.user.id == category.user_id %}
 <form action="/users/{{ g.user.id }}/categories/{{ category.id }}/edit">
-  <button class="btn btn-outline-danger">Edit Category!</button>
+  <button class="btn btn-outline-danger btn-sm">Edit Category!</button>
 </form>
 
 <form method="POST" action="/users/{{ g.user.id }}/categories/{{ category.id }}/delete">
-  <button class="btn btn-danger">Delete Category!</button>
+  <button class="btn btn-danger btn-sm">Delete Category!</button>
 </form>
 {% endif %}
 </div>
-
+</div>
 
 {% endblock %}

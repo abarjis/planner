@@ -7,7 +7,7 @@
 {% if g.user %}
 {% if not meal_plan %}
 
-<h5 style="text-decoration: none; color:rgb(39, 177, 12)">You have no saved meals! <a href="/users/{{ g.user.id }}/generate">Click here to generate meals!</a></h5>
+<h5 style="text-decoration: none; color:rgb(39, 177, 12)">You Have No Saved Plan! <a href="/users/{{ g.user.id }}/generate">Click Here To Generate One!</a></h5>
 
 {% elif meal_plan %}
 
@@ -22,7 +22,7 @@
        <div class="card-body">
       <h5 class="card-title" style="text-decoration: none; color:rgb(30, 124, 11)">{{meal_plan.breakfast_title}}</h5>
       <p class="card-text" style="text-decoration: none; color:rgb(30, 134, 9)">Ready in {{meal_plan.breakfast_readyin}} minutes</p>
-      <a href="{{meal_plan.breakfast_url}}" target="_blank" class="btn btn-outline-success">Recipe Details!</a>
+      <a href="{{meal_plan.breakfast_url}}" target="_blank" class="btn btn-outline-success btn-sm">Recipe Details!</a>
     </div>
   </div>
  
@@ -33,7 +33,7 @@
        <div class="card-body">
       <h5 class="card-title" style="text-decoration: none; color:rgb(30, 124, 11)">{{meal_plan.lunch_title}}</h5>
       <p class="card-text" style="text-decoration: none; color:rgb(30, 134, 9)">Ready in {{meal_plan.lunch_readyin}} minutes</p>
-      <a href="{{meal_plan.lunch_url}}" target="_blank" class="btn btn-outline-success">Recipe Details!</a>
+      <a href="{{meal_plan.lunch_url}}" target="_blank" class="btn btn-outline-success btn-sm">Recipe Details!</a>
     </div>
   </div>
 
@@ -44,9 +44,19 @@
     <div class="card-body">
       <h5 class="card-title" style="text-decoration: none; color:rgb(30, 124, 11)">{{meal_plan.dinner_title}}</h5>
       <p class="card-text" style="text-decoration: none; color:rgb(30, 134, 9)">Ready in {{meal_plan.dinner_readyin}} minutes</p>
-      <a href="{{meal_plan.dinner_url}}" target="_blank" class="btn btn-outline-success">Recipe Details!</a>
+      <a href="{{meal_plan.dinner_url}}" target="_blank" class="btn btn-outline-success btn-sm">Recipe Details!</a>
     </div>
   </div>
+</div>
+</div>
+
+<div class="border border-light p-3 mb-4">
+  <div class="text-center">
+    <a class="btn btn-success btn-sm" style=" color: rgb(255, 255, 255)" href="/users/{{ g.user.id }}/generate">Generate New Plan!</a>
+ 
+    <form method="POST" action="/users/{{ g.user.id }}/view_plan/delete">
+    <button class="btn btn-danger btn-sm">Delete This Plan!</button>
+  </form>
 </div>
 </div>
 

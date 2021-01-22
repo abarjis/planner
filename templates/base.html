@@ -40,30 +40,27 @@
       {% else %}
 
     <div class="dropdown">
-      <button class="btn dropdown-toggle" style="background-color: #628057" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn dropdown-toggle" style="background-color: #4b8b33" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i style="text-decoration:none; color: rgb(255, 255, 255)" class="fa fa-user"></i>
     </button>
-      <div class="dropdown-menu" style="background-color: #628057"  aria-labelledby="dropdownMenuButton">
+      <div class="dropdown-menu" style="background-color: #4b8b33"  aria-labelledby="dropdownMenuButton">
         <a class="dropdown-item" style="text-decoration:none; color: rgb(255, 255, 255)" href="/users/{{ g.user.id }}" >{{ g.user.username }}</a>
-        <a class="dropdown-item" style="text-decoration:none; color: rgb(255, 255, 255)" href="/users/{{ g.user.id }}/generate">Generate Plan</a>
         <a class="dropdown-item" style="text-decoration:none; color: rgb(255, 255, 255)" href="/users/{{ g.user.id }}/categories">Categories</a>
         <a class="dropdown-item" style="text-decoration:none; color: rgb(255, 255, 255)" href="/users/{{ g.user.id }}/recipes">My Favirote Recipes</a>
         <a class="dropdown-item" style="text-decoration:none; color: rgb(255, 255, 255)" href="/users/{{ g.user.id }}/view_plan">View My Plan</a>
-        <a class="dropdown-item" style="text-decoration:none; color: rgb(255, 255, 255)" href="/users/{{ g.user.id }}/shopping-list">Shopping List</a>
         <a class="dropdown-item" style="text-decoration:none; color: rgb(255, 255, 255)" href="/logout">Log out</a>
       </div>
     </div>
-
-
-
-
+  
+      <a class="nav-item nav-link" href="/users/{{ g.user.id }}/generate" style="text-decoration:none; color: rgb(255, 255, 255)">Generate Plan</a>
+  
+      <a class="nav-item nav-link" href="/users/{{ g.user.id }}/shopping-list" style="background-color: #4b8b33" ><i style="text-decoration:none; color: rgb(255, 255, 255)" class="fas fa-shopping-cart"></i> </a>
       {% endif %}
   </ul>
 
   </div>
 
 </nav>
-
 <div class="container mt-5">
   {% for msg in get_flashed_messages() %}
   <div class="alert alert-info">{{ msg }}</div>

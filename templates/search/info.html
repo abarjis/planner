@@ -3,15 +3,14 @@
 {% block body %}
 
  
-
+{% if g.user %}
 <div style="max-width: 70%; margin: auto; padding-top:3%">
-
-
-  {%if fav_recipe%}
+  
+  {%if recipe in g.user.recipes%}
   <h4>Recipe already saved in favorites</h4>
   {%else%}
   <form id="recipeForm" method="POST">
-    <button id="myRecipes" class="btn btn-success mt-4" data-recipe_id="{{recipe['id']}}" data-recipe_title="{{recipe['title']}}" data-summary="{{recipe['summary']}}" data-user_id="{{user_id}}">Add to my fav recipes</button>
+    <button id="myRecipes" class="btn btn-success mt-4" data-recipe_id="{{recipe['id']}}" data-recipe_url="{{recipe['spoonacularSourceUrl']}}" data-recipe_title="{{recipe['title']}}" data-summary="{{recipe['summary']}}" data-user_id="{{user_id}}">Add To My Recipes</button>
   </form><br>
   {%endif%}
 
@@ -31,5 +30,5 @@
 
 </div>
 
-
+{% endif %}
 {% endblock %}

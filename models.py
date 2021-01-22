@@ -154,7 +154,7 @@ class Recipe(db.Model):
     summary = db.Column(db.Text)
     recipe_id = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-
+    recipe_url = db.Column(db.Text)
     assignments = db.relationship('CatRecipe', backref='recipe', cascade="save-update, merge," "delete, delete-orphan")
 
 ##    categories = db.relationship('Category', secondary="category_recipes", backref="recipes")

@@ -5,18 +5,81 @@ async function favRecipe(evt){
   const recipe_title = $('#myRecipes').data('recipe_title')
   const summary = $('#myRecipes').data('summary')
   const user_id = $('#myRecipes').data('user_id')
+  const recipe_url = $('#myRecipes').data('recipe_url')
 
   await axios.post(`/users/${user_id}/recipes/add_recipe`, {
     recipe_id,
     recipe_title,
     summary,
+    recipe_url,
     user_id
   })
-  $("#recipeForm").html("<h5>Recipe added to my favorites!</h5>");
+  $("#recipeForm").html("Saved!");
 }
 $('#recipeForm').on("submit", favRecipe);
 $("#recipeForm").trigger("reset");
 
+
+
+
+async function favPlanRecipe(evt){
+  evt.preventDefault()
+  $('#planRecipes').attr('disabled', true)
+  const recipe_id = $('#planRecipes').data('recipe_id')
+  const recipe_title = $('#planRecipes').data('recipe_title')
+  const user_id = $('#planRecipes').data('user_id')
+  const recipe_url = $('#planRecipes').data('recipe_url')
+
+  await axios.post(`/users/${user_id}/details/save-recipe`, {
+    recipe_id,
+    recipe_title,
+    user_id,
+    recipe_url
+  })
+  $("#planRecipeForm").html("Saved!");
+}
+$('#planRecipeForm').on("submit", favPlanRecipe);
+$("#planRecipeForm").trigger("reset");
+
+
+async function favPlanRecipe1(evt){
+  evt.preventDefault()
+  $('#planRecipes1').attr('disabled', true)
+  const recipe_id = $('#planRecipes1').data('recipe_id')
+  const recipe_title = $('#planRecipes1').data('recipe_title')
+  const user_id = $('#planRecipes1').data('user_id')
+  const recipe_url = $('#planRecipes1').data('recipe_url')
+
+  await axios.post(`/users/${user_id}/details/save-recipe`, {
+    recipe_id,
+    recipe_title,
+    user_id,
+    recipe_url
+  })
+  $("#planRecipeForm1").html("Saved!");
+}
+$('#planRecipeForm1').on("submit", favPlanRecipe1);
+$("#planRecipeForm1").trigger("reset");
+
+
+async function favPlanRecipe2(evt){
+  evt.preventDefault()
+  $('#planRecipes2').attr('disabled', true)
+  const recipe_id = $('#planRecipes2').data('recipe_id')
+  const recipe_title = $('#planRecipes2').data('recipe_title')
+  const user_id = $('#planRecipes2').data('user_id')
+  const recipe_url = $('#planRecipes2').data('recipe_url')
+
+  await axios.post(`/users/${user_id}/details/save-recipe`, {
+    recipe_id,
+    recipe_title,
+    user_id,
+    recipe_url
+  })
+  $("#planRecipeForm2").html("Saved!");
+}
+$('#planRecipeForm2').on("submit", favPlanRecipe2);
+$("#planRecipeForm2").trigger("reset");
 
 
 
@@ -35,10 +98,12 @@ async function deleteRecipe() {
 $('.delete-myrecipe').click(deleteMyRecipe)
 
 async function deleteMyRecipe() {
-  const id = $(this).data('myrecipe_id')
+  const myrecipe_id = $(this).data('myrecipe_id')
   const category_id = $(this).data('category_id')
   const user_id = $(this).data('user_id')
-  await axios.delete(`/users/${user_id}/categories/${category_id}/${id}`)
+  await axios.patch(`/users/${user_id}/categories/${category_id}`, {
+    myrecipe_id
+  })
   $(this).parent().remove()
 }
 
@@ -102,7 +167,7 @@ async function savePlan(evt){
     dinner_readyin,
     dinner_url
   })
-  $("#generatePlanForm").html("<h5>Meal Plan Saved!</h5>");
+  $("#generatePlanForm").html("Meal Plan Saved!");
 }
 $('#generatePlanForm').on("submit", savePlan);
 $("#generatePlanForm").trigger("reset");
@@ -110,49 +175,3 @@ $("#generatePlanForm").trigger("reset");
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-$("#formButton").click(function(){
-  $("#formEdit").toggle();
-});
-
-
-
-
-
-//$('.formEdit').on("submit", editCatRecipe);
-
-async function editCatRecipe(evt) {
-  evt.preventDefault();
-  $('.formEdit').attr('disabled', true)
-  const category_id = $('#formEdit').data('category_id')
-  const user_id = $('#formEdit').data('user_id')
-  const recipe_id = $('#formEdit').data('recipe_id')
-	const title = $('#title').val()
-  const summary = $('#summary').val()
-
-	await axios.patch(`/users/${user_id}/categories/${category_id}/edit`, {
-    recipe_id,
-    title, 
-    summary })
-
-
-    $("#submitEdit").html("<h7>Edit Confirmed!</h7>");
-    }
-    $('.formEdit').on("submit", editCatRecipe);
-    //$(this).siblings('#formEdit').on('submit', editCatRecipe)
-    $(".formEdit").trigger("reset")*/

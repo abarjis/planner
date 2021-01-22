@@ -1,0 +1,6 @@
+secret.py
+venv/
+__pycache__/secret.cpython-38.pyc
+__pycache__/models.cpython-38.pyc
+__pycache__/forms.cpython-38.pyc
+__pycache__/app.cpython-38.pyc

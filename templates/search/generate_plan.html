@@ -3,6 +3,14 @@
 {% block body %}
 
 
+<center>
+
+<h2 style="padding-top: 3%; text-decoration: none; color:rgb(43, 146, 22)">
+        It's time for cooking! Not sure what to cook? <br>
+        <small class="text-muted"> Let's warm up with a joke: {{ joke['text'] | safe }} </small>
+</h2><br>
+
+
 <div class="generate">
     <form class="form-group d-flex justify-content-center md-form form-sm active-purple active-purple-2 mt-2" action="details" method="GET">
         
@@ -16,13 +24,16 @@
 
         <input class="form-control form-control-sm ml-3 w-75" type="search" placeholder="Target Calories (Ex: 2000)"
          aria-label="Search" id="cal" name="cal">
-
+            
 
             <button class="btn btn-outline-success btn-rounded btn-sm my-0 d-flex" type="submit" id="button-addon2"> Generate </button>
 
       </form>
 </div>
 
+</center><br>
+
+<a class="btn btn-success btn-sm"  style="text-decoration:none; color: rgb(255, 255, 255)" href="/users/{{ g.user.id }}/view_plan">View My Saved Plan</a>
 
 
 

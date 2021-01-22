@@ -14,10 +14,14 @@
     <div class="card-header" style="text-decoration: none; color:rgb(39, 177, 12)">
       Breakfast
     </div>
-       <div class="card-body">
-      <h5 class="card-title">{{recipes[0]['title']}}</h5>
-      <p class="card-text">Ready in {{recipes[0]['readyInMinutes']}} minutes</p>
-      <a href="{{recipes[0]['sourceUrl']}}" target="_blank" class="btn btn-primary">Recipe Details!</a>
+       <div class="card-body" >
+      <h5 class="card-title" style="text-decoration: none; color:rgb(30, 124, 11)">{{recipes[0]['title']}}</h5>
+      <p class="card-text" style="text-decoration: none; color:rgb(30, 124, 11)">Ready in {{recipes[0]['readyInMinutes']}} minutes</p>
+      <a href="{{recipes[0]['sourceUrl']}}" target="_blank" class="btn btn-success btn-sm">Recipe Details!</a>
+
+      <form id="planRecipeForm" method="POST">
+        <button id="planRecipes" class="btn btn-outline-success btn-sm mt-4" data-recipe_id="{{recipes[0]['id']}}" data-recipe_title="{{recipes[0]['title']}}" data-recipe_url="{{recipes[0]['sourceUrl']}}" data-user_id="{{user_id}}">Add to My Recipes</button>
+      </form><br>
     </div>
   </div>
  
@@ -26,9 +30,12 @@
       Lunch
     </div>
        <div class="card-body">
-      <h5 class="card-title">{{recipes[1]['title']}}</h5>
-      <p class="card-text">Ready in {{recipes[1]['readyInMinutes']}} minutes</p>
-      <a href="{{recipes[1]['sourceUrl']}}" target="_blank" class="btn btn-primary">Recipe Details!</a>
+      <h5 class="card-title" style="text-decoration: none; color:rgb(30, 124, 11)">{{recipes[1]['title']}}</h5>
+      <p class="card-text" style="text-decoration: none; color:rgb(30, 124, 11)">Ready in {{recipes[1]['readyInMinutes']}} minutes</p>
+      <a href="{{recipes[1]['sourceUrl']}}" target="_blank" class="btn btn-success btn-sm">Recipe Details!</a>
+      <form id="planRecipeForm1" method="POST">
+        <button id="planRecipes1" class="btn btn-outline-success btn-sm mt-4" data-recipe_id="{{recipes[1]['id']}}" data-recipe_title="{{recipes[1]['title']}}" data-recipe_url="{{recipes[1]['sourceUrl']}}" data-user_id="{{user_id}}">Add to My Recipes</button>
+      </form><br>
     </div>
   </div>
 
@@ -37,9 +44,13 @@
       Dinner
     </div>
     <div class="card-body">
-      <h5 class="card-title">{{recipes[2]['title']}}</h5>
-      <p class="card-text">Ready in {{recipes[2]['readyInMinutes']}} minutes</p>
-      <a href="{{recipes[2]['sourceUrl']}}" target="_blank" class="btn btn-primary">Recipe Details!</a>
+      <h5 class="card-title" style="text-decoration: none; color:rgb(30, 124, 11)">{{recipes[2]['title']}}</h5>
+      <p class="card-text" style="text-decoration: none; color:rgb(30, 124, 11)">Ready in {{recipes[2]['readyInMinutes']}} minutes</p>
+      <a href="{{recipes[2]['sourceUrl']}}" target="_blank" class="btn btn-success btn-sm">Recipe Details!</a>
+      
+      <form id="planRecipeForm2" method="POST">
+        <button id="planRecipes2" class="btn btn-outline-success btn-sm mt-4" data-recipe_id="{{recipes[2]['id']}}" data-recipe_title="{{recipes[2]['title']}}" data-recipe_url="{{recipes[2]['sourceUrl']}}" data-user_id="{{user_id}}">Add to My Recipes</button>
+      </form><br>
     </div>
   </div>
 </div>
@@ -51,10 +62,13 @@
 
 
 <form id="generatePlanForm" method="POST">
-  <button id="plan" class="btn btn-success mt-4" data-breakfast_id="{{recipes[0]['id']}}" data-lunch_id="{{recipes[1]['id']}}" data-dinner_id="{{recipes[2]['id']}}"
+  <button id="plan" class="btn btn-outline-success btn-sm mt-4" data-breakfast_id="{{recipes[0]['id']}}" data-lunch_id="{{recipes[1]['id']}}" data-dinner_id="{{recipes[2]['id']}}"
    data-breakfast_title="{{recipes[0]['title']}}" data-lunch_title="{{recipes[1]['title']}}" data-dinner_title="{{recipes[2]['title']}}"
     data-breakfast_readyin="{{recipes[0]['readyInMinutes']}}" data-lunch_readyin="{{recipes[1]['readyInMinutes']}}" data-dinner_readyin="{{recipes[2]['readyInMinutes']}}"
-     data-breakfast_url="{{recipes[0]['sourceUrl']}}" data-lunch_url="{{recipes[1]['sourceUrl']}}" data-dinner_url="{{recipes[2]['sourceUrl']}}" data-user_id="{{user_id}}">Save my recipes</button>
+     data-breakfast_url="{{recipes[0]['sourceUrl']}}" data-lunch_url="{{recipes[1]['sourceUrl']}}" data-dinner_url="{{recipes[2]['sourceUrl']}}" data-user_id="{{user_id}}">Save This Plan</button>
 </form><br>
+
+<a class="btn btn-success btn-sm" style="text-decoration:none; color: rgb(255, 255, 255)" href="/users/{{ g.user.id }}/generate">Generate New Plan</a>
+<a class="btn btn-success btn-sm"  style="text-decoration:none; color: rgb(255, 255, 255)" href="/users/{{ g.user.id }}/view_plan">View My Saved Plan</a>
 
 {% endblock %}
