@@ -16,16 +16,16 @@ CURR_USER_KEY = "curr_user"
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql:///planner"
-db.init_app(app)
 
+
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    'DATABASE_URL', 'postgresql:///planner')
+db.init_app(app)
 with app.app_context():
    ## db.drop_all()
     db.create_all()
 
-
-
-##app = Flask(__name__)
 CORS(app, support_credentials=True)
 
 ##app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql:///planner"
