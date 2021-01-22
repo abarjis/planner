@@ -23,7 +23,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     'DATABASE_URL', 'postgresql:///planner')
 db.init_app(app)
 with app.app_context():
-   ## db.drop_all()
+    db.drop_all()
     db.create_all()
 
 CORS(app, support_credentials=True)
