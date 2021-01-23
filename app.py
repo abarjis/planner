@@ -6,7 +6,6 @@ from werkzeug.exceptions import Unauthorized
 from forms import UserForm, LoginForm, UserEditForm, CategoryForm, MyRecipeForm, NewRecipeForCategoryForm, ShoppingListForm
 from flask_cors import CORS, cross_origin
 from sqlalchemy.exc import IntegrityError
-from secret import key
 import requests
 import simplejson as json
 
