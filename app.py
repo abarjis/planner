@@ -33,7 +33,7 @@ app.config['SQLALCHEMY_ECHO'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "mealplanner")
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 toolbar = DebugToolbarExtension(app)
-API_KEY = os.getenv('API_KEY', '?apiKey=31e9e1aa8f2743cab4861305274b1e47')
+API_KEY = os.getenv('API_KEY', '?apiKey=')
 
 
 connect_db(app)
@@ -48,7 +48,7 @@ find = "recipes/complexSearch"
 randomFind = "recipes/random"
 connect_user = "users/connect"
 generate_url = "mealplanner/generate"
-API_KEY = '?apiKey=31e9e1aa8f2743cab4861305274b1e47'
+
 
 
 @app.before_request
@@ -762,7 +762,7 @@ def delete_todo(list_id, user_id):
     db.session.delete(mark_item)
     db.session.commit()
    
-    return redirect(f"/users/{user_id}/shopping-list")
+    return (jsonify(delete_todo=mark_item.to_dict()), 201)
     
 
 
