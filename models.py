@@ -1,7 +1,7 @@
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 
-from secret import key
+
 import requests
 
 
@@ -83,15 +83,6 @@ class User(db.Model):
         return False
 
 
-##    recipes = db.relationship(
-##        'Recipe', secondary="category_recipes", backref="categories", cascade="all, delete-orphan")
-
-##    myrecipes = db.relationship(
-##        'MyRecipe', secondary="category_myrecipes", backref="categories", cascade="all, delete-orphan")
-
-
-
-
 
 class Category(db.Model):
     """Categories."""
@@ -126,7 +117,6 @@ class MyRecipe(db.Model):
 
     assignments = db.relationship('CatMyRecipe',  backref='myrecipe', cascade="save-update, merge," "delete, delete-orphan")
 
-##    categories = db.relationship('Category', secondary="category_myrecipes", backref="myrecipes")
 
     def __repr__(self):
         return f'<MyRecipe: {self.title}>'
@@ -157,10 +147,6 @@ class Recipe(db.Model):
     recipe_url = db.Column(db.Text)
     assignments = db.relationship('CatRecipe', backref='recipe', cascade="save-update, merge," "delete, delete-orphan")
 
-##    categories = db.relationship('Category', secondary="category_recipes", backref="recipes")
-
-
-##    assignments = db.relationship('CatRecipes', backref='recipes', cascade="all, delete-orphan")
 
     def __repr__(self):
         return f'<Recipe: {self.title}>'
@@ -190,7 +176,7 @@ class CatMyRecipe(db.Model):
     """Mapping of a category to a recipe."""
 
     __tablename__ = "category_myrecipes"
-##    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), primary_key=True)
     myrecipe_id = db.Column(db.Integer, db.ForeignKey('myrecipes.id'), primary_key=True)
 
@@ -254,15 +240,4 @@ def connect_db(app):
 
     db.app = app
     db.init_app(app)
-
-
-
-
-
-
-"""
-
-    def __repr__(self):
-        return f"<Recipe {self.id} recipe_title={self.user_title} user_id={self.user_id} recipe_id={self.recipe_id} recipe_url={self.recipe_url}>"
-"""
 
