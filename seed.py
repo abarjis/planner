@@ -1,7 +1,7 @@
-from models import connect_db, db, User, Recipe, Category, ShoppingList, MyRecipe, CatRecipe, CatMyRecipe, MealPlan
+from models import db
 from app import app
 
 
-
-db.drop_all()
-db.create_all()
+with app.app_context():
+    db.drop_all()
+    db.create_all()

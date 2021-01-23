@@ -21,9 +21,9 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     'DATABASE_URL', 'postgresql:///planner')
 db.init_app(app)
-with app.app_context():
+##with app.app_context():
    ## db.drop_all()
-    db.create_all()
+  ##  db.create_all()
 
 CORS(app, support_credentials=True)
 
@@ -35,8 +35,6 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 toolbar = DebugToolbarExtension(app)
 API_KEY = os.getenv('API_KEY', '?apiKey=31e9e1aa8f2743cab4861305274b1e47')
 
-
-print(API_KEY)
 
 connect_db(app)
 
@@ -50,7 +48,7 @@ find = "recipes/complexSearch"
 randomFind = "recipes/random"
 connect_user = "users/connect"
 generate_url = "mealplanner/generate"
-
+API_KEY = '?apiKey=31e9e1aa8f2743cab4861305274b1e47'
 
 
 @app.before_request
@@ -305,7 +303,7 @@ def fav_recipes(user_id):
     recipes = Recipe.query.filter(user_id==Recipe.user_id)
     myrecipes = MyRecipe.query.filter(user_id==MyRecipe.user_id)
 
-    return render_template("recipes/recipes.html", recipe=recipes, user_id=user_id, myrecipes=myrecipes)
+    return render_template("recipes/recipes.html", recipes=recipes, user_id=user_id, myrecipes=myrecipes)
 
 
 @app.route('/users/<int:user_id>/recipes/delete', methods=['POST'])
