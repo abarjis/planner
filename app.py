@@ -231,7 +231,7 @@ def search_recipes(user_id):
         return redirect("/")
 
     querysearch = request.args['q']
-    querys = {"query":querysearch, "number":"1", "addRecipeInformation":"true", "sort":"random"}
+    querys = {"query":querysearch, "number":"12", "addRecipeInformation":"true", "sort":"random"}
     response = requests.get(f'{url}{find}{API_KEY}', params=querys)
     res = response.json()
     data = res["results"]
