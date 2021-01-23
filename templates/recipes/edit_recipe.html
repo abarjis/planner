@@ -4,19 +4,19 @@
 
 {% block body %}
 
-<h1>Edit Recipe</h1>
+<h3 style="text-decoration:none; color: rgb(38, 128, 20)">Edit Recipe:</h3>
 
 <form method="POST" action="edit">
 
   <div class="form-group row">
-    <label for="title" class="col-sm-2 col-form-label">Title</label>
+    <label for="title" style="text-decoration:none; color: rgb(39, 177, 12)" class="col-sm-2 col-form-label">Title:</label>
     <div class="col-sm-10">
-      <input class="form" id="title" name="title" value="{{ recipe.title }}">
+      <input class="form-control" id="title" name="title" value="{{ recipe.title }}">
     </div>
 
-    <label for="summary" class="col-sm-2 col-form-label">Summary</label>
+    <label for="summary" style="text-decoration:none; color: rgb(39, 177, 12)" class="col-sm-2 col-form-label">Summary:</label>
     <div class="col-sm-10">
-        <input class="form" id="summary" name="summary" value="{{ recipe.summary }}">
+        <input class="form-control" id="summary" name="summary" value="{{ recipe.summary }}">
       </div>
   </div>
 
@@ -25,10 +25,10 @@
 
   <div class="form-group row">
     <div class="ml-auto mr-3">
-      <a href="/users/{{ g.user.id }}/recipes/{{ recipe.id }}" class="btn btn-outline-info">
+      <a href="/users/{{ g.user.id }}/recipes/{{ recipe.id }}" class="btn btn-outline-danger btn-sm">
         Cancel
       </a>
-      <button type="submit" class="btn btn-success">
+      <button type="submit" class="btn btn-success btn-sm">
         Edit
       </button>
     </div>
