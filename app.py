@@ -6,6 +6,7 @@ from werkzeug.exceptions import Unauthorized
 from forms import UserForm, LoginForm, UserEditForm, CategoryForm, MyRecipeForm, NewRecipeForCategoryForm, ShoppingListForm
 from flask_cors import CORS, cross_origin
 from sqlalchemy.exc import IntegrityError
+from secret import key
 import requests
 import simplejson as json
 
@@ -21,6 +22,9 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     'DATABASE_URL', 'postgresql:///planner')
 db.init_app(app)
+with app.app_context():
+   ## db.drop_all()
+    db.create_all()
 
 CORS(app, support_credentials=True)
 
@@ -29,12 +33,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "mealplanner")
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
-key = os.environ.get("key", 'apisecretkey')
 toolbar = DebugToolbarExtension(app)
+API_KEY = os.getenv('API_KEY', '?apiKey=31e9e1aa8f2743cab4861305274b1e47')
 
 
-
-
+print(API_KEY)
 
 connect_db(app)
 
@@ -232,7 +235,7 @@ def search_recipes(user_id):
 
     querysearch = request.args['q']
     querys = {"query":querysearch, "number":"1", "addRecipeInformation":"true", "sort":"random"}
-    response = requests.get(f'{url}{find}{key}', params=querys)
+    response = requests.get(f'{url}{find}{API_KEY}', params=querys)
     res = response.json()
     data = res["results"]
     return render_template("search/search.html", recipes=data, user_id=user_id, querysearch=querysearch)
@@ -251,12 +254,12 @@ def recipe_info(user_id):
     recipe_info_endpoint = "recipes/{0}/information".format(recipe_id)
     ingedientsWidget = "recipes/{0}/ingredientWidget".format(recipe_id)
     equipmentWidget = "recipes/{0}/equipmentWidget".format(recipe_id)
-    recipe_info = requests.get(f'{url}{recipe_info_endpoint}{key}').json()
+    recipe_info = requests.get(f'{url}{recipe_info_endpoint}{API_KEY}').json()
 
 
     querystring = {"defaultCss":"true", "showBacklink":"false"}
-  ##  recipe_info['inregdientsWidget'] = requests.get(f'{url}{ingedientsWidget}{key}', params=querystring).text
-   ## recipe_info['equipmentWidget'] = requests.get(f'{url}{equipmentWidget}{key}', params=querystring).text
+    recipe_info['inregdientsWidget'] = requests.get(f'{url}{ingedientsWidget}{API_KEY}', params=querystring).text
+    recipe_info['equipmentWidget'] = requests.get(f'{url}{equipmentWidget}{API_KEY}', params=querystring).text
      
 
     return render_template('search/info.html', recipe=recipe_info, user_id=user_id)
@@ -797,7 +800,7 @@ def generate(user_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    joke_response = requests.get(f'{url}{random_joke}{key}').json()
+    joke_response = requests.get(f'{url}{random_joke}{API_KEY}').json()
    
     ##str(requests.request("GET", url + random_joke).json())
     ##str(requests.get(f'{url}{random_joke}{key}').json())
@@ -826,7 +829,7 @@ def plan_details(user_id):
     else:
         url_generate = "https://api.spoonacular.com/mealplanner/generate"
         querystring = {"timeFrame":"day","targetCalories":cal,"diet":diet,"exclude":exc}
-        response = requests.request("GET", f"{url_generate}{key}", params=querystring)
+        response = requests.request("GET", f"{url_generate}{API_KEY}", params=querystring)
         plan = json.loads(response.text)
         meals = plan['meals']
 
