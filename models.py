@@ -190,6 +190,16 @@ class ShoppingList(db.Model):
     checked = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+    def to_dict(self):
+        """Serialize recipe to a dict of recipe info."""
+
+        return {
+            "id": self.id,
+            "item": self.item,
+            "checked": self.checked,
+            "user_id": self.user_id,
+        }
+
 
 
 class MealPlan(db.Model):
