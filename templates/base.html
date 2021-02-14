@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>
-    Meal Planner &ndash; {% block title %}{% endblock %}
+    Meal Planner {% block title %}{% endblock %}
   </title>
   <link rel="stylesheet"  type='text/css' href="/static/css/style.css">
   <link rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
@@ -46,7 +46,7 @@
       <div class="dropdown-menu" style="background-color: #4b8b33"  aria-labelledby="dropdownMenuButton">
         <a class="dropdown-item" style="text-decoration:none; color: rgb(255, 255, 255)" href="/users/{{ g.user.id }}" >{{ g.user.username }}</a>
         <a class="dropdown-item" style="text-decoration:none; color: rgb(255, 255, 255)" href="/users/{{ g.user.id }}/categories">Categories</a>
-        <a class="dropdown-item" style="text-decoration:none; color: rgb(255, 255, 255)" href="/users/{{ g.user.id }}/recipes">My Favirote Recipes</a>
+        <a class="dropdown-item" style="text-decoration:none; color: rgb(255, 255, 255)" href="/users/{{ g.user.id }}/recipes">My Favorite Recipes</a>
         <a class="dropdown-item" style="text-decoration:none; color: rgb(255, 255, 255)" href="/users/{{ g.user.id }}/view_plan">View My Plan</a>
         <a class="dropdown-item" style="text-decoration:none; color: rgb(255, 255, 255)" href="/logout">Log out</a>
       </div>

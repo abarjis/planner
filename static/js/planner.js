@@ -1,3 +1,5 @@
+// Save Searched recipes to My Favorite Recipes
+
 async function favRecipe(evt){
   evt.preventDefault()
   $('#myRecipes').attr('disabled', true)
@@ -20,8 +22,13 @@ $('#recipeForm').on("submit", favRecipe);
 $("#recipeForm").trigger("reset");
 
 
+/* Save a Recipe from your daily generated plan to My Favorite Recipes
+favPlanRecipe function => Breakfast
+favPlanRecipe1 function => Lunch
+favPlanRecipe2 function => Dinner
+*/
 
-
+// Breakfast
 async function favPlanRecipe(evt){
   evt.preventDefault()
   $('#planRecipes').attr('disabled', true)
@@ -42,6 +49,7 @@ $('#planRecipeForm').on("submit", favPlanRecipe);
 $("#planRecipeForm").trigger("reset");
 
 
+// Lunch
 async function favPlanRecipe1(evt){
   evt.preventDefault()
   $('#planRecipes1').attr('disabled', true)
@@ -62,6 +70,7 @@ $('#planRecipeForm1').on("submit", favPlanRecipe1);
 $("#planRecipeForm1").trigger("reset");
 
 
+// Dinner
 async function favPlanRecipe2(evt){
   evt.preventDefault()
   $('#planRecipes2').attr('disabled', true)
@@ -83,6 +92,10 @@ $("#planRecipeForm2").trigger("reset");
 
 
 
+/*
+Delete a recipe from a category
+*** This for Searched Recipes ***
+*/
 $('.delete-recipe').click(deleteRecipe)
 
 async function deleteRecipe() {
@@ -93,7 +106,10 @@ async function deleteRecipe() {
   $(this).parent().remove()
 }
 
-
+/*
+Delete a recipe from a category
+*** This for recipes you have created ***
+*/
 
 $('.delete-myrecipe').click(deleteMyRecipe)
 
@@ -110,9 +126,12 @@ async function deleteMyRecipe() {
 
 
 
-//Shopping list Functions
-$('.delete-todo').click(deleteTodo)
-async function deleteTodo(){
+/* Shopping list Functions
+- delete a shopping list item.
+- check done an item.
+*/
+$('.delete-todo').click(deleteItem)
+async function deleteItem(){
     const id = $(this).data('id')
     const user = $(this).data('user')
     await axios.delete(`/users/${user}/shopping-list/${id}`)
@@ -128,7 +147,9 @@ async function markTodo(){
 }
 
 
-
+/*
+Function to save a generated daily plan
+*/
 
 
 
