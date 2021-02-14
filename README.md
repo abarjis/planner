@@ -6,11 +6,6 @@ such as saving recipes and generating a personalized daily meal plan.
 
 ## Usage and Features:
 - Signup or Login using your email address.
-- Search over 300,000 recipes by typing recipe title, ingredients, diet, cuisine...etc.
-- Easily save recipes and retrieve them later or create your own recipe.
-- Create categories and easily manage them by adding from your saved or created recipes.
-- Users can easily generate a daily meal plan based on their diet, target calories, and what ingredients to be excluded.
-- Finally, users can easily create a shopping list by adding, checking, or deleting items.
 
 ### Search Recipes:
 - Search over 300,000 recipes by typing recipe title, ingredients, diet, cusine...etc, or simply click on the search button to get random recipes.
