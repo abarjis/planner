@@ -48,13 +48,12 @@ find = "recipes/complexSearch"
 randomFind = "recipes/random"
 connect_user = "users/connect"
 generate_url = "mealplanner/generate"
-API_KEY = "?apiKey=31e9e1aa8f2743cab4861305274b1e47"
 
 
 
 @app.before_request
 def add_user_to_g():
-    """If we're logged in, add curr user to Flask global."""
+    """If logged in, add curr user to Flask global."""
 
     if CURR_USER_KEY in session:
         g.user = User.query.get(session[CURR_USER_KEY])

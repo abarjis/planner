@@ -11,8 +11,6 @@ db = SQLAlchemy()
 
 
 
-
-
 url = "https://api.spoonacular.com/"
 
 
@@ -133,8 +131,6 @@ class MyRecipe(db.Model):
 
 
 
-
-
 class Recipe(db.Model):
     """recipes."""
     __tablename__ = "recipes"
@@ -173,7 +169,7 @@ class CatRecipe(db.Model):
 
 
 class CatMyRecipe(db.Model):
-    """Mapping of a category to a recipe."""
+    """Mapping of a category to myrecipe."""
 
     __tablename__ = "category_myrecipes"
 
@@ -182,7 +178,7 @@ class CatMyRecipe(db.Model):
 
 
 class ShoppingList(db.Model):
-
+    """Shopping Cart"""
     __tablename__ = "shopping_lists"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -203,7 +199,7 @@ class ShoppingList(db.Model):
 
 
 class MealPlan(db.Model):
-    
+    """Daily meal plan"""
     __tablename__ = "meal_plan"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
