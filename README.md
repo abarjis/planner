@@ -43,6 +43,7 @@ such as saving recipes and generating a personalized daily meal plan.
 - **SQL, Flask-SQLAlchemy, PostegerSQL.**
 - Recipes Data from **[The Spoonacular API](https://spoonacular.com/food-api/docs).**
 - Deployed on **Heroku**.
+- *** For more information about how to install PostegerSQL, visit https://www.postgresql.org/docs/13/ ***
 
 ### VISIT THE APP HERE: 
 **[The Daily Meal Planner](https://daily-meal-planner.herokuapp.com)**
