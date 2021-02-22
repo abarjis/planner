@@ -14,14 +14,14 @@ such as saving recipes and generating a personalized daily meal plan.
 
 ### Save or create recipes:
 - Save your favorite recipes or create your on recipe.
-- Navbar dropdown => My Favorite Recipes, to retrive your save recipes.
+- Navbar dropdown => My Favorite Recipes, to retrive your favorite recipes.
 - Click on the recipe title to view the recipe details.
 
 ### Generate a daily meal plan:
-- Generate a daily meal plan; Breakfast, lunch and dinner.
+- Generate a daily meal plan; Breakfast, Lunch and Dinner.
 - Generate a plan based on 3 inputs: your favorite diet, your daily target calories, and what ingredints to exclude.
 - You can generate a new one or save the plan and retrive it later; navbar dropdown => View My Plan.
-- You can also save each indvidual recipe from the daily plan and retrive it later from => My Favorite recipes.
+- You can also save each indvidual recipe from the daily plan and retrive it later from => My Favorite Recipes.
 
 ### Create Recipe Categories:
 - Create Your own recipe categories (such as Keto Recipes,...etc) and add recipes from your saved favorite recipes.
