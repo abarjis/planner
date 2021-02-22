@@ -101,6 +101,15 @@ class Category(db.Model):
     def __repr__(self):
         return f'{int(self.recipes.id) (self.title)}'
 
+    def to_dict(self):
+        """Serialize category to a dict."""
+
+        return {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "user_id": self.user_id,
+        }
     
       
 
@@ -138,7 +147,7 @@ class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.Text, nullable=False)
     summary = db.Column(db.Text)
-    recipe_id = db.Column(db.Integer)
+    recipe_id = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     recipe_url = db.Column(db.Text)
     assignments = db.relationship('CatRecipe', backref='recipe', cascade="save-update, merge," "delete, delete-orphan")

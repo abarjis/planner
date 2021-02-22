@@ -2,12 +2,13 @@
 
 # run these tests like:
 #
-# python -m unittest test_user_model.py
+# python -m unittest test_model.py
 
 
 import os
 from unittest import TestCase
 from sqlalchemy import exc
+from sqlalchemy.exc import IntegrityError
 
 from models import db, User, Category, Recipe
 
@@ -36,10 +37,18 @@ class UserModelTestCase(TestCase):
         uid2 = 2222
         u2.id = uid2
 
+        r = Recipe(title="recipe_test", summary="summary_test", recipe_id="5")
+
+        db.session.add_all([u1, u2, r])
         db.session.commit()
 
         u1 = User.query.get(uid1)
         u2 = User.query.get(uid2)
+
+
+        self.r = r
+        self.r_id = r.id
+
 
         self.u1 = u1
         self.uid1 = uid1
@@ -55,7 +64,7 @@ class UserModelTestCase(TestCase):
         return res
 
 
-    def test_user_model(self):
+    def testUserModel(self):
         """Does basic model work?"""
 
         u = User(
@@ -94,12 +103,6 @@ class UserModelTestCase(TestCase):
         # Bcrypt strings should start with $2b$
         self.assertTrue(u_test.password.startswith("$2b$"))
 
-    def test_invalid_username_signup(self):
-        invalid = User.register(None, "password", "testname1", "test@email.com")
-        uid = 123456789
-        invalid.id = uid
-        with self.assertRaises(exc.IntegrityError) as context:
-            db.session.commit()
 
     def test_invalid_email_signup(self):
         invalid = User.register("testtest", "password", "testname1", None)
@@ -127,3 +130,38 @@ class UserModelTestCase(TestCase):
 
     def test_wrong_password(self):
         self.assertFalse(User.authenticate(self.u1.username, "badpassword"))
+
+
+
+    def testRecipeModel(self):
+        """ Does basic model work? """
+        r = self.r
+        self.assertEqual(r.id, self.r_id)
+        self.assertIsInstance(r, Recipe)
+        self.assertEqual(r.title, "recipe_test")
+        self.assertEqual(r.summary, "summary_test")
+
+
+    def testUserRecipes(self):
+        u1 = self.u1
+        r = self.r
+
+        self.assertNotIn(r, u1.recipes)
+        u1.recipes.append(r)
+        db.session.commit()
+
+        self.assertIn(r, u1.recipes)
+
+
+    def test_add_recipe(self):
+        """ test add a new recipe """
+
+        u1 = self.u1
+        rcp = Recipe(title='newRecipe', summary="newSummary", recipe_id="1010")
+        self.u1.recipes.append(rcp)
+        db.session.commit()
+
+        self.assertEqual(len(u1.recipes), 1)
+        self.assertIn(rcp, u1.recipes)
+        self.assertEqual(u1.recipes[0].title, rcp.title)
+        self.assertEqual(u1.recipes[0].summary, rcp.summary)

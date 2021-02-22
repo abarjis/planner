@@ -2,7 +2,7 @@
 
 # run these tests like:
 #
-# FLASK_ENV=production python -m unittest test_user_views.py
+# FLASK_ENV=production python -m unittest test_views.py
 
 import os
 from unittest import TestCase
@@ -47,7 +47,7 @@ class ViewsTestCase(TestCase):
         self.u3_id = 890
         self.u3.id = self.u3_id
 
-        r = Recipe(title="test recipe", summary="test summary")
+        r = Recipe(title="test recipe", summary="test summary", recipe_id="3")
         self.r_id = r.id
 
         db.session.add_all([self.u1, self.u2, r])
@@ -66,8 +66,10 @@ class ViewsTestCase(TestCase):
             with c.session_transaction() as sess:
                 sess[CURR_USER_KEY] = self.u1_id
             resp = c.get(f"/users/{self.u1_id}")
-            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
 
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Username:', html)
 
     def test_register_page(self):
         """ Test register """
@@ -100,6 +102,19 @@ class ViewsTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 200)
             self.assertNotIn(self.u2_id, s)
+            self.assertIn('You have successfully logged out.', html)
+
+
+    def test_search_recipes(self):
+        
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.u1_id
+            resp = c.get(f"/users/{self.u1_id}/search?q=pasta")
+            html = resp.get_data(as_text=True)
+            
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Recipes search', html)
 
     def test_recipes(self):
         """ Test view recipes """
@@ -107,9 +122,31 @@ class ViewsTestCase(TestCase):
             with c.session_transaction() as s:
                 s[CURR_USER_KEY] = self.u3_id
             resp = c.get(f"/users/{self.u3_id}/recipes")
+            html = resp.get_data(as_text=True)
 
             self.assertEqual(resp.status_code, 200)
+            self.assertIn('Recipes You Saved:', html)
 
+
+    def test_view_recipe(self):
+
+
+        r = Recipe(title="test recipe", summary="test summary", recipe_id="3", user_id=self.testuser_id)
+        
+        db.session.add(r)
+        db.session.commit()
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.testuser.id
+            
+            r = Recipe.query.get(3)
+
+            resp = c.get(f"/users/{self.testuser_id}/recipes/{self.r_id}")
+            html = resp.get_data(as_text=True)
+
+            self.assertNotEqual(resp.status_code, 200)
+            self.assertIn('title', html )
 
     def test_categories(self):
         """ Test view categories"""
@@ -117,16 +154,67 @@ class ViewsTestCase(TestCase):
             with c.session_transaction() as s:
                 s[CURR_USER_KEY] = self.u3_id
             resp = c.get(f"/users/{self.u3_id}/categories")
-
+            html = resp.get_data(as_text=True)
+           
             self.assertEqual(resp.status_code, 200)
+            self.assertIn('My Food Categories:', html)
 
 
-
-    def test_generate_details(self):
+    def test_generate(self):
         """ Test generate plan """
         with self.client as c:
             with c.session_transaction() as s:
                 s[CURR_USER_KEY] = self.u1_id
-            resp = c.get(f"/users/{self.u1_id}/generate-plan")
+            resp = c.get(f"/users/{self.u1_id}/generate")
+            html = resp.get_data(as_text=True)
 
             self.assertEqual(resp.status_code, 200)
+            self.assertIn('</h2>', html)
+
+
+    def test_view_plan(self):
+        """ Test view plan """
+        with self.client as c:
+            with c.session_transaction() as s:
+                s[CURR_USER_KEY] = self.u1_id
+            resp = c.get(f"/users/{self.u1_id}/view_plan")
+            html = resp.get_data(as_text=True)
+            
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('</h5>', html)
+
+
+    def test_save_plan(self):
+        """ Test save plan """
+        with self.client as c:
+            with c.session_transaction() as s:
+                s[CURR_USER_KEY] = self.u1_id
+            resp = c.get(f"/users/{self.u1_id}/details/save")
+            html = resp.get_data(as_text=True)
+            
+            self.assertNotEqual(resp.status_code, 200)
+            self.assertIn('title', html)
+
+
+    def test_plan_details(self):
+        """ Test plan details"""
+        with self.client as c:
+            with c.session_transaction() as s:
+                s[CURR_USER_KEY] = self.u1_id
+            resp = c.get(f"/users/{self.u1_id}/details")
+            html = resp.get_data(as_text=True)
+            
+            self.assertEqual(resp.status_code, 400)
+            self.assertIn('title', html)
+
+   
+    def test_shopping_cart(self):
+        """ Test Shopping cart"""
+        with self.client as c:
+            with c.session_transaction() as s:
+                s[CURR_USER_KEY] = self.u1_id
+            resp = c.get(f"/users/{self.u1_id}/shopping-list")
+            html = resp.get_data(as_text=True)
+            
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('item', html)

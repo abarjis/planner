@@ -6,7 +6,9 @@
 
 <ul class="list-group">
 {% for recipe in recipes %}
-  <li class="list-group-item list-group-sm"><a href="/users/{{ g.user.id }}/recipes/{{ recipe.id }}" style="text-decoration:none; color: rgb(39, 177, 12)"> {{ recipe.title }} </a></li>
+  <li class="list-group-item list-group-sm"><a href="/users/{{ g.user.id }}/recipes/{{ recipe.id }}" style="text-decoration:none; color: rgb(39, 177, 12)"> {{ recipe.title }} </a>
+  <a class="btn btn-danger btn-sm float-right del-recipe" style="text-decoration:none; color: rgb(255, 255, 255)" data-recipe_id="{{recipe.id}}" data-user_id="{{g.user['id']}}">X</a>
+  </li>
 {% endfor %}
 </ul>
 <a class="btn btn-outline-success btn-rounded btn-sm my-0" href="/">Search More Recipes</a><br>
@@ -15,20 +17,15 @@
 
 <ul class="list-group">
   {% for myrecipe in myrecipes %}
-    <li class="list-group-item list-group-sm"><a href="/users/{{ g.user.id }}/myrecipes/{{ myrecipe.id }}" style="text-decoration:none; color: rgb(39, 177, 12)"> {{ myrecipe.title }} </a></li>
+    <li class="list-group-item list-group-sm"><a href="/users/{{ g.user.id }}/myrecipes/{{ myrecipe.id }}" style="text-decoration:none; color: rgb(39, 177, 12)"> {{ myrecipe.title }} </a>
+      <a class="btn btn-danger btn-sm float-right del-myrecipe" style="text-decoration:none; color: rgb(255, 255, 255)" data-myrecipe_id="{{myrecipe.id}}" data-user_id="{{g.user['id']}}">X</a>
+    </li>
   {% endfor %}
 </ul>
 
 <a class="btn btn-outline-success btn-rounded btn-sm my-0" href="/users/{{ g.user.id }}/myrecipes/add">Add New Recipe</a>
-<br>
 
 
-<div class="border border-light p-3 mb-4">
-      <div class="text-center">
-<form method="POST"
-      action="/users/{{ g.user.id }}/recipes/delete">
-  <button class="btn btn-outline-danger btn-rounded btn-sm my-0">Delete All Recipes</button>
-</form>
-      </div>
-      </div>
+
+
 {% endblock %}

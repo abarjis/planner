@@ -4,7 +4,7 @@
 
 <div class="jumbotron">
   
- <h5> <li style="text-decoration:none; color: rgb(39, 177, 12)">{{ myrecipe.title }}</li> </h5>
+ <h5> <li style="text-decoration:none; color: rgb(39, 177, 12)">{{ myrecipe.title }}</li><a class="btn btn-outline-danger float-right btn-rounded btn-sm my-0" href="/users/{{ g.user.id }}/myrecipes/{{ myrecipe.id }}/edit">Edit!</a></h5>
   {% if myrecipe.summary %}
   <p class="lead" style="font-size:15px; color: rgb(39, 119, 23)"><b>{{ myrecipe.summary | safe }}</b></p>
   {% endif %}
@@ -12,14 +12,7 @@
 </div>
 
 {% if g.user.id == myrecipe.user_id %}
-<form action="/users/{{ g.user.id }}/myrecipes/{{ myrecipe.id }}/edit">
-  <button class="btn btn-outline-danger btn-rounded btn-sm my-0">Edit</button>
-</form>
 
-<form method="POST"
-      action="/users/{{ g.user.id }}/myrecipes/{{ myrecipe.id }}/delete">
-  <button class="btn btn-outline-danger btn-rounded btn-sm my-0">Delete</button>
-</form>
 {% endif %}
 
 

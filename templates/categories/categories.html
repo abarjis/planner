@@ -8,6 +8,7 @@
 {% for category in categories %}
   <li class="list-group-item">
      <a href="/users/{{ g.user.id }}/categories/{{ category.id }}" style="text-decoration:none; color: rgb(39, 177, 12)">{{ category.title }}</a>
+     <a class="btn btn-danger btn-sm float-right delete-category" style="text-decoration:none; color: rgb(255, 255, 255)" data-category_id="{{category.id}}" data-user_id="{{g.user['id']}}">X</a>
   </li>
 {% endfor %}
 

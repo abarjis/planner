@@ -22,11 +22,139 @@ $('#recipeForm').on("submit", favRecipe);
 $("#recipeForm").trigger("reset");
 
 
+
+/*
+Delete a recipe from your favs.
+*/
+$('.del-recipe').click(delRecipe)
+
+async function delRecipe() {
+  const id = $(this).data('recipe_id')
+  const user_id = $(this).data('user_id')
+  await axios.delete(`/users/${user_id}/recipes/${id}`)
+  $(this).parent().remove()
+  location.reload(true);
+}
+
+/*
+Delete a recipe you have created
+*/
+
+$('.del-myrecipe').click(delMyRecipe)
+
+async function delMyRecipe() {
+  const id = $(this).data('myrecipe_id')
+  const user_id = $(this).data('user_id')
+  await axios.delete(`/users/${user_id}/myrecipes/${id}`)
+  $(this).parent().remove()
+  location.reload(true);
+}
+
+/*
+Delete Category
+*/
+
+
+$('.delete-category').click(deleteCategory)
+
+async function deleteCategory() {
+  const category_id = $(this).data('category_id')
+  const user_id = $(this).data('user_id')
+  await axios.delete(`/users/${user_id}/categories/${category_id}`)
+  $(this).parent().remove()
+  location.reload(true);
+}
+
+/*
+Delete a recipe from a category
+*** This for Searched Recipes you have saved ***
+*/
+$('.delete-recipe').click(deleteRecipe)
+
+async function deleteRecipe() {
+  const id = $(this).data('recipe_id')
+  const category_id = $(this).data('category_id')
+  const user_id = $(this).data('user_id')
+  await axios.delete(`/users/${user_id}/categories/${category_id}/${id}`)
+  $(this).parent().remove()
+  location.reload(true);
+}
+
+/*
+Delete a recipe from a category
+*** This for recipes you have created ***
+*/
+
+$('.delete-myrecipe').click(deleteMyRecipe)
+
+async function deleteMyRecipe() {
+  const myrecipe_id = $(this).data('myrecipe_id')
+  const category_id = $(this).data('category_id')
+  const user_id = $(this).data('user_id')
+  await axios.patch(`/users/${user_id}/categories/${category_id}`, {
+    myrecipe_id
+  })
+  $(this).parent().remove()
+  location.reload(true);
+}
+ 
+
+
+
+/*
+Function to save a generated daily plan
+*/
+
+
+
+async function savePlan(evt){
+  evt.preventDefault()
+  $('#plan').attr('disabled', true)
+  const user_id = $('#plan').data('user_id')
+  const breakfast_id = $('#plan').data('breakfast_id')
+  const breakfast_title = $('#plan').data('breakfast_title')
+  const breakfast_readyin = $('#plan').data('breakfast_readyin')
+  const breakfast_url = $('#plan').data('breakfast_url')
+
+  const lunch_id = $('#plan').data('lunch_id')
+  const lunch_title = $('#plan').data('lunch_title')
+  const lunch_readyin = $('#plan').data('lunch_readyin')
+  const lunch_url = $('#plan').data('lunch_url')
+
+  const dinner_id = $('#plan').data('dinner_id')
+  const dinner_title = $('#plan').data('dinner_title')
+  const dinner_readyin = $('#plan').data('dinner_readyin')
+  const dinner_url = $('#plan').data('dinner_url')
+
+
+
+  await axios.post(`/users/${user_id}/details/save`, {
+    breakfast_id,
+    breakfast_title,
+    breakfast_readyin,
+    breakfast_url,
+    lunch_id,
+    lunch_title,
+    lunch_readyin,
+    lunch_url,
+    dinner_id,
+    dinner_title,
+    dinner_readyin,
+    dinner_url
+  })
+  $("#generatePlanForm").html("Meal Plan Saved!");
+}
+$('#generatePlanForm').on("submit", savePlan);
+$("#generatePlanForm").trigger("reset");
+
+
 /* Save a Recipe from your daily generated plan to My Favorite Recipes
 favPlanRecipe function => Breakfast
 favPlanRecipe1 function => Lunch
 favPlanRecipe2 function => Dinner
 */
+
+
 
 // Breakfast
 async function favPlanRecipe(evt){
@@ -92,42 +220,8 @@ $("#planRecipeForm2").trigger("reset");
 
 
 
-/*
-Delete a recipe from a category
-*** This for Searched Recipes ***
-*/
-$('.delete-recipe').click(deleteRecipe)
-
-async function deleteRecipe() {
-  const id = $(this).data('recipe_id')
-  const category_id = $(this).data('category_id')
-  const user_id = $(this).data('user_id')
-  await axios.delete(`/users/${user_id}/categories/${category_id}/${id}`)
-  $(this).parent().remove()
-}
-
-/*
-Delete a recipe from a category
-*** This for recipes you have created ***
-*/
-
-$('.delete-myrecipe').click(deleteMyRecipe)
-
-async function deleteMyRecipe() {
-  const myrecipe_id = $(this).data('myrecipe_id')
-  const category_id = $(this).data('category_id')
-  const user_id = $(this).data('user_id')
-  await axios.patch(`/users/${user_id}/categories/${category_id}`, {
-    myrecipe_id
-  })
-  $(this).parent().remove()
-}
-
-
-
-
-/* Shopping list Functions
-- delete a shopping list item.
+/* Shopping Cart Functions
+- delete a shopping cart item.
 - check done an item.
 */
 $('.delete-todo').click(deleteItem)
@@ -136,6 +230,7 @@ async function deleteItem(){
     const user = $(this).data('user')
     await axios.delete(`/users/${user}/shopping-list/${id}`)
     $(this).parent().remove()
+    location.reload(true);
 }
 
 $('.todo-item').click(markTodo)
@@ -144,55 +239,5 @@ async function markTodo(){
     const user = $(this).siblings('.delete-todo').data('user')
     await axios.post(`/users/${user}/shopping-list/${id}`)
     $(this).siblings('.todo-text').toggleClass('checked')
+    location.reload(true);
 }
-
-
-/*
-Function to save a generated daily plan
-*/
-
-
-
-async function savePlan(evt){
-  evt.preventDefault()
-  $('#plan').attr('disabled', true)
-  const user_id = $('#plan').data('user_id')
-  const breakfast_id = $('#plan').data('breakfast_id')
-  const breakfast_title = $('#plan').data('breakfast_title')
-  const breakfast_readyin = $('#plan').data('breakfast_readyin')
-  const breakfast_url = $('#plan').data('breakfast_url')
-
-  const lunch_id = $('#plan').data('lunch_id')
-  const lunch_title = $('#plan').data('lunch_title')
-  const lunch_readyin = $('#plan').data('lunch_readyin')
-  const lunch_url = $('#plan').data('lunch_url')
-
-  const dinner_id = $('#plan').data('dinner_id')
-  const dinner_title = $('#plan').data('dinner_title')
-  const dinner_readyin = $('#plan').data('dinner_readyin')
-  const dinner_url = $('#plan').data('dinner_url')
-
-
-
-  await axios.post(`/users/${user_id}/details/save`, {
-    breakfast_id,
-    breakfast_title,
-    breakfast_readyin,
-    breakfast_url,
-    lunch_id,
-    lunch_title,
-    lunch_readyin,
-    lunch_url,
-    dinner_id,
-    dinner_title,
-    dinner_readyin,
-    dinner_url
-  })
-  $("#generatePlanForm").html("Meal Plan Saved!");
-}
-$('#generatePlanForm').on("submit", savePlan);
-$("#generatePlanForm").trigger("reset");
-
-
-
-

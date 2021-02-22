@@ -25,13 +25,13 @@
     {%for todo in todo_list%}
     {%if todo.checked%}
     <li class="list-group-item" style="color: #349b0c">
-         <a class="btn btn-danger delete-todo float-right" data-id="{{todo.id}}" data-user="{{g.user['id']}}"><i class="fas fa-minus-square"></i></a>
+         <a class="btn btn-danger delete-todo float-right" style="color: #f8f8f8" data-id="{{todo.id}}" data-user="{{g.user['id']}}"><i class="fas fa-minus-square"></i></a>
          <input type="checkbox" class="todo-item" checked>
          <span class="todo-text checked h5">{{todo.item}}</span>
         </li>
     {%else%}
     <li class="list-group-item" style="color: #349b0c">
-        <a class="btn btn-danger btn-sml delete-todo float-right" data-id="{{todo.id}}" data-user="{{g.user['id']}}"><i class="fas fa-minus-square"></i></a>
+        <a class="btn btn-danger btn-sml delete-todo float-right" style="color: #f8f8f8" data-id="{{todo.id}}" data-user="{{g.user['id']}}"><i class="fas fa-minus-square"></i></a>
         <input type="checkbox" class="todo-item">
         <span class="todo-text h4">{{todo.item}}</span>
         </li>

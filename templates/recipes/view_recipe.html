@@ -4,8 +4,8 @@
 
 <div class="jumbotron">
   
- <h5> <li style="text-decoration:none; color: rgb(39, 177, 12)">{{ recipe.title }}</li> </h5>
-
+ <h5> <li style="text-decoration:none; color: rgb(39, 177, 12)">{{ recipe.title }}<a class="btn btn-outline-danger float-right btn-rounded btn-sm my-0"
+  href="/users/{{ g.user.id }}/recipes/{{ recipe.id }}/edit">Edit!</a></li> </h5>
   <p class="lead" style="font-size:15px; color: rgb(39, 119, 23)">
     {% if recipe.summary and recipe.recipe_url %}
     <a href="{{recipe['recipe_url']}}" target="_blank" style="font-size:15px; color: rgb(39, 119, 23)">Click here for recipe details!</a>
@@ -14,23 +14,11 @@
     <b>{{ recipe.summary | safe }}</b>
   {% elif recipe.recipe_url %}
   <a href="{{recipe['recipe_url']}}" target="_blank" style="font-size:15px; color: rgb(39, 119, 23)">Click here for recipe details!</a>
+ 
   {% endif %}
 </p>
  
 
 </div>
-
-{% if g.user.id == recipe.user_id %}
-<form action="/users/{{ g.user.id }}/recipes/{{ recipe.id }}/edit">
-  <button class="btn btn-outline-danger btn-rounded btn-sm my-0">Edit</button>
-</form>
-
-<form method="POST"
-      action="/users/{{ g.user.id }}/recipes/{{ recipe.id }}/delete">
-  <button class="btn btn-danger btn-rounded btn-sm my-0">Delete</button>
-</form>
-{% endif %}
-
-
 
 {% endblock %}
